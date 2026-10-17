@@ -1,17 +1,19 @@
-# EliMira — Portfolio
+# EliMira: Portfolio
 
-**CS Student &bull; AI/ML Path &bull; Egypt**
+CS student at Culture & Science City, Egypt. Building gesture control, autonomous agents, and games.
 
-Building the future of AI automation, one agent at a time.
+## Projects
 
-## Current Focus
-- **Gesture Control** — Hand-tracking desktop control (MediaPipe, OpenCV)
-- **DevSquad Agent** — Multi-agent code review system
-- **AI Automation** — LangGraph, CrewAI, autonomous workflows
+- **Gesture Control**: Hand-tracking desktop control (MediaPipe, OpenCV)
+- **DevSquad Agent**: Multi-agent code review system (LangGraph)
+- **Fruit Slicer**: Arcade game (pygame)
 
 ## Tech Stack
-`Python` `SQL` `PySide6` `OpenCV` `MediaPipe` `pygame` `Git` `Linux` `AI Automation` `AI Autonomous Agents`
 
-## Connect
-- GitHub: https://github.com/Eli-Mira
-- LinkedIn: https://linkedin.com/in/eli-mira
+Python · SQL · PySide6 · OpenCV · MediaPipe · pygame · Git · Linux
+
+## Links
+
+- [GitHub](https://github.com/Eli-Mira)
+- [LinkedIn](https://linkedin.com/in/eli-mira)
+- [Portfolio](https://eli-mira.github.io)
