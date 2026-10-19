@@ -40,9 +40,11 @@ npm run dev      # http://127.0.0.1:5174
 
 ```bash
 npm run lint          # ESLint, no errors
-npm test               # content and byte-integrity tests
+npm test               # content, motion and policy tests
 npm run build          # production build
+npm run test:built     # checks on the built output
 npm run test:budget    # build size ceilings
+npm run test:integrity # the released tree is unchanged
 npm run preview        # serve the build on http://127.0.0.1:4179
 npm run test:browser   # Playwright checks against the preview
 ```
@@ -54,6 +56,25 @@ npm run test:browser   # Playwright checks against the preview
 set CHROMIUM_PATH=C:\Users\<you>\AppData\Local\ms-playwright\chromium-<build>\chrome-win64\chrome.exe
 npm run test:browser
 ```
+
+## Security
+
+The content security policy is in `scripts/policy.mjs`. The build fills the
+script hashes in from the scripts that are really in the built page, so the
+policy cannot stop matching them, and writes the policy into the page as a
+meta tag.
+
+**GitHub Pages does not read the `_headers` file.** That is a Netlify and
+Cloudflare Pages convention, so a policy delivered that way never reaches
+the browser. The meta tag is what protects the live site. The build still
+writes a `_headers` file, carrying the same policy plus the directives a
+meta tag cannot (`frame-ancestors`, and the response headers), for a front
+end that can set them. `npm run serve:headers` serves the build with that
+file applied, and the browser suite runs against it.
+
+Two things GitHub Pages cannot do, and this site does not claim otherwise:
+set `X-Frame-Options`, and deliver `frame-ancestors`. Both need a front end
+in front of the site.
 
 ## Layout
 

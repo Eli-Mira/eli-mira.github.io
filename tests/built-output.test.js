@@ -8,9 +8,9 @@ import test from 'node:test';
  * Checks the built output.
  *
  * These run after the build, because the thing being checked is what was
- * actually produced: the script hash the policy allows has to match the
- * script that is really in the page, or the policy is wrong in a way no
- * source-level check would notice.
+ * actually produced: the policy has to allow the script that is really in
+ * the page, and the header file has to say the same thing, or one of them
+ * is a claim nobody checked.
  */
 const root = path.resolve(import.meta.dirname, '..');
 const built = path.join(root, 'dist');
@@ -23,14 +23,16 @@ const options = { skip: present ? false : 'The build output is not there. Run np
 const html = present ? fs.readFileSync(htmlFile, 'utf8') : '';
 const headers = present ? fs.readFileSync(headersFile, 'utf8') : '';
 
-test('the built page sends the headers the source declares', options, () => {
-  assert.match(headers, /Content-Security-Policy:/);
-  assert.match(headers, /X-Content-Type-Options: nosniff/);
-  assert.match(headers, /X-Frame-Options: DENY/);
+const delivered = () => html.match(/<meta[^>]*http-equiv="Content-Security-Policy"[^>]*content="([^"]+)"/)?.[1] ?? '';
+
+test('the built page carries the policy as a meta tag', options, () => {
+  // GitHub Pages does not read the _headers file, so the meta tag is the
+  // one that actually reaches the browser.
+  assert.ok(delivered(), 'The built page has no content security policy');
 });
 
 test('the policy allows every inline script that is really in the page', options, () => {
-  const policy = headers.match(/Content-Security-Policy:\s*(.+)/)?.[1] ?? '';
+  const policy = delivered();
   const inline = [...html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)];
   assert.ok(inline.length > 0, 'The page should have the inline failsafe script');
 
@@ -38,9 +40,24 @@ test('the policy allows every inline script that is really in the page', options
     const digest = crypto.createHash('sha256').update(body, 'utf8').digest('base64');
     assert.ok(
       policy.includes(`'sha256-${digest}'`),
-      `The policy does not allow the inline script ${digest}. Update the hash in public/_headers.`,
+      `The policy does not allow the inline script ${digest}. The build should have filled it in.`,
     );
   }
+});
+
+test('the header file says the same thing as the page', options, () => {
+  const header = headers.match(/Content-Security-Policy:\s*(.+)/)?.[1]?.trim();
+  assert.ok(header, 'The header file has no content security policy');
+  assert.equal(header, `${delivered()}; frame-ancestors 'none'`,
+    'The header file and the page disagree about the policy');
+});
+
+test('the header file carries the directives a meta tag cannot', options, () => {
+  assert.match(headers, /X-Content-Type-Options: nosniff/);
+  assert.match(headers, /X-Frame-Options: DENY/);
+  assert.match(headers, /Referrer-Policy:/);
+  assert.match(headers, /Permissions-Policy:/);
+  assert.match(headers, /Cross-Origin-Opener-Policy: same-origin/);
 });
 
 test('the built site has a robots file and a sitemap', options, () => {
