@@ -1,0 +1,26 @@
+[
+  {
+    "file": "display.woff2",
+    "sourceBytes": 87556,
+    "woff2Bytes": 20144,
+    "sha256": "cc5391e4991213c7b3bd1ac66358d9516d52aaa91e014341ff086c22324e9de3"
+  },
+  {
+    "file": "body.woff2",
+    "sourceBytes": 164700,
+    "woff2Bytes": 23424,
+    "sha256": "09d05aaea37d6b933bbfd910372fa0f1bd06722550401be5307047e4fdb06e6f"
+  },
+  {
+    "file": "mono.woff2",
+    "sourceBytes": 128812,
+    "woff2Bytes": 12848,
+    "sha256": "00bf151c3bc927f296a75596bbed88cdaa3525ffaf80b13efb406209f1a68c52"
+  },
+  {
+    "file": "impact.woff2",
+    "sourceBytes": 87996,
+    "woff2Bytes": 2440,
+    "sha256": "07baf8d736b323adda9348839b05be70feb7ad0e234e1362080400f08be3fcc3"
+  }
+]

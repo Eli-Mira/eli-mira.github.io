@@ -1,0 +1,57 @@
+:root {
+  color-scheme: dark;
+
+  /* Palette — brief-specified, unchanged. */
+  --void: #09090c;
+  --carbon: #17171d;
+  --blood: #c31632;
+  --signal: #ff3347;
+  --bone: #f2f0ef;
+  --muted: #a8a4a8;
+  --line: #363039;
+  --deep-cut: #230911;
+
+  /* Type. Self-hosted faces only; no system display fallback in use. */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-impact: 'Archivo Black', 'Arial Black', sans-serif;
+  --font-body: Manrope, Arial, sans-serif;
+  --font-mono: 'Redline Mono', 'IBM Plex Mono', monospace;
+
+  /* Type scale. */
+  --text-hero: clamp(58px, 6vw, 104px);
+  --text-section: clamp(42px, 4.6vw, 68px);
+  --text-title: clamp(26px, 2.2vw, 34px);
+  --text-body: 15px;
+  --text-small: 13px;
+  --text-label: 11px;
+  --text-micro: 10px;
+
+  /* Spacing — 4px base. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 20px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 64px;
+  --space-8: 96px;
+  --space-9: 120px;
+
+  /* Layout. */
+  --gutter: clamp(24px, 5vw, 80px);
+  --measure: 1320px;
+  --header-h: 76px;
+
+  /* Motion. */
+  --duration: 180ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+}
+
+@theme inline {
+  --color-void: var(--void);
+  --color-carbon: var(--carbon);
+  --color-blood: var(--blood);
+  --color-signal: var(--signal);
+  --color-bone: var(--bone);
+  --font-sans: var(--font-body);
+}

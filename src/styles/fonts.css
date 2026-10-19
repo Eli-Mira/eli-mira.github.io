@@ -1,0 +1,4 @@
+@font-face { font-family: 'Barlow Condensed'; src: url('../assets/fonts/display.woff2') format('woff2'); font-weight: 800; font-display: swap; }
+@font-face { font-family: 'Archivo Black'; src: url('../assets/fonts/impact.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+@font-face { font-family: Manrope; src: url('../assets/fonts/body.woff2') format('woff2'); font-weight: 400 700; font-display: swap; }
+@font-face { font-family: 'Redline Mono'; src: url('../assets/fonts/mono.woff2') format('woff2'); font-weight: 400; font-display: swap; }

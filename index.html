@@ -1,262 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EliMira — CS Student & AI/ML Engineer</title>
-  <meta name="description" content="Portfolio of EliMira, a CS student building gesture control, autonomous agents, and game development projects.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Sans:wght@400;500;600;700&family=Instrument+Serif:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-  <!-- NAV -->
-  <nav>
-    <div class="container">
-      <a href="index.html" class="logo">Eli<span>Mira</span></a>
-      <ul class="nav-links">
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#skills">Skills</a></li>
-        <li><a href="#path">Path</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="https://github.com/Eli-Mira" target="_blank" rel="noopener">GitHub</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <div class="reveal">
-        <h1>Hi, I'm Eli. I build tools that try to run themselves.</h1>
-        <p class="hero-sub">
-          Computer science student in Egypt. Working on hand-tracking desktop control,
-          autonomous code review agents, and a pygame arcade game.
-        </p>
-        <div class="hero-ctas">
-          <a href="#projects" class="btn btn-primary">View Projects</a>
-          <a href="about.html" class="btn btn-secondary">About</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS — varied composition: one featured, two supporting -->
-  <section id="projects">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-header">
-          <span class="section-label">Projects</span>
-          <h2>Things I've built</h2>
-        </div>
-      </div>
-
-      <div class="project-featured reveal">
-        <div>
-          <span class="project-label">Flagship</span>
-          <h3>DevSquad Agent</h3>
-          <p>
-            Multi-agent code review system built on LangGraph. Four specialized reviewers
-            (architecture, security, quality, design) run in parallel and converge on a
-            unified report. The system debates its own findings before writing them up.
-          </p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:16px;">
-            <span class="tag">AI Agents</span>
-            <span class="tag">LangGraph</span>
-            <span class="tag">Python</span>
-          </div>
-        </div>
-        <div>
-          <span class="project-label">Featured</span>
-          <p style="font-size:0.9rem; margin-bottom:12px;">
-            The most complex system I've built so far. It reads a git diff, splits it across
-            four reviewer agents, and only returns a report once they agree.
-          </p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <span class="tag">Multi-Agent</span>
-            <span class="tag">Code Review</span>
-            <span class="tag">Security</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="project-grid" style="margin-top:40px;">
-        <div class="project-card reveal">
-          <h3>Gesture Control</h3>
-          <p>Real-time hand-tracking desktop control using MediaPipe and OpenCV. Navigate your screen with gestures.</p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <span class="tag">Python</span>
-            <span class="tag">MediaPipe</span>
-          </div>
-        </div>
-        <div class="project-card reveal">
-          <h3>Fruit Slicer</h3>
-          <p>Arcade-style fruit slicing game built with pygame. Built to learn game loops, rendering, and real-time input handling.</p>
-          <div style="display:flex; gap:6px; flex-wrap:wrap;">
-            <span class="tag">pygame</span>
-            <span class="tag">Python</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- SKILLS — clean categorized list, not card grid -->
-  <section id="skills">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-header">
-          <span class="section-label">Capabilities</span>
-          <h2>Skills & Tools</h2>
-        </div>
-      </div>
-      <div class="reveal">
-        <div class="skills-categories">
-          <div class="skill-section">
-            <h3>AI Agents & Orchestration</h3>
-            <div class="skill-items">
-              <span class="skill-item">Hermes Agent</span>
-              <span class="skill-item">LangGraph</span>
-              <span class="skill-item">CrewAI</span>
-              <span class="skill-item">Multi-Agent</span>
-              <span class="skill-item">DevSquad</span>
-            </div>
-          </div>
-          <div class="skill-section">
-            <h3>Software Development</h3>
-            <div class="skill-items">
-              <span class="skill-item">Python</span>
-              <span class="skill-item">SQL</span>
-              <span class="skill-item">PySide6</span>
-              <span class="skill-item">FastAPI</span>
-              <span class="skill-item">TDD</span>
-              <span class="skill-item">Git</span>
-            </div>
-          </div>
-          <div class="skill-section">
-            <h3>Computer Vision</h3>
-            <div class="skill-items">
-              <span class="skill-item">OpenCV</span>
-              <span class="skill-item">MediaPipe</span>
-              <span class="skill-item">Hand Tracking</span>
-            </div>
-          </div>
-          <div class="skill-section">
-            <h3>Data & ML</h3>
-            <div class="skill-items">
-              <span class="skill-item">Data Engineering</span>
-              <span class="skill-item">PostgreSQL</span>
-              <span class="skill-item">Pydantic</span>
-              <span class="skill-item">ML Pipelines</span>
-            </div>
-          </div>
-          <div class="skill-section">
-            <h3>Design & Security</h3>
-            <div class="skill-items">
-              <span class="skill-item">Antislop</span>
-              <span class="skill-item">Glass-Dark UI</span>
-              <span class="skill-item">SAST</span>
-              <span class="skill-item">OWASP</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PATH — timeline -->
-  <section id="path">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-header">
-          <span class="section-label">The roadmap</span>
-          <h2>Where I'm at</h2>
-        </div>
-      </div>
-      <div class="reveal">
-        <div class="timeline">
-          <div class="timeline-item">
-            <h4>CS50P &amp; CS50 SQL</h4>
-            <p>Python and database fundamentals</p>
-            <span class="tag">Completed</span>
-          </div>
-          <div class="timeline-item">
-            <h4>Data Engineering</h4>
-            <p>ETL pipelines, Pydantic models, SQL</p>
-            <span class="tag">In Progress</span>
-          </div>
-          <div class="timeline-item">
-            <h4>AI/ML Engineering</h4>
-            <p>Model deployment, vector DBs, agent frameworks</p>
-            <span class="tag">Next</span>
-          </div>
-          <div class="timeline-item">
-            <h4>Autonomous Agents</h4>
-            <p>Multi-agent systems, self-improving workflows</p>
-            <span class="tag">Building now</span>
-          </div>
-          <div class="timeline-item">
-            <h4>Financial Independence</h4>
-            <p>Through code, freelance, and shipped products</p>
-            <span class="tag">Goal</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT PREVIEW -->
-  <section>
-    <div class="container">
-      <div class="reveal">
-        <p style="font-size:1rem;">
-          I'm a 20-year-old CS student at Culture &amp; Science City in 6th of October, Egypt.
-          I build gesture control, autonomous code review agents, and pygame games.
-          <a href="about.html" class="btn btn-secondary" style="display:inline-block; margin-left:12px; padding:6px 16px; font-size:0.8rem; vertical-align:middle;">Read more about me</a>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <div class="footer-links">
-        <a href="https://github.com/Eli-Mira" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com/in/eli-mira" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="mailto:3emad2lden@gmail.com">Email</a>
-        <a href="about.html">About</a>
-      </div>
-      <p class="footer-copy">
-        Built by EliMira &bull; <span id="year"></span>
-      </p>
-    </div>
-  </footer>
-
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    /* Scroll reveal — minimalist-ui R-07 */
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    /* Smooth scroll for same-page anchors */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
-    });
-  </script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="%ROBOTS%" />
+    <meta name="theme-color" content="#09090C" />
+    <meta name="description" content="Eli's REDLINE // OVERDRIVE portfolio reference. Software projects, AI experiments and an original ASCII interface for Lain." />
+    <link rel="icon" href="./favicon.ico" />
+    <title>ELI / REDLINE // OVERDRIVE</title>
+    <script>
+      // Reserve the entrance animation before first paint, so the title
+      // sequence never flashes its final state. The failsafe releases the
+      // content if the motion runtime cannot load.
+      (function () {
+        var root = document.documentElement;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        root.classList.add('hero-pending');
+        root.classList.add('reveal-pending');
+        window.__motionFailsafe = setTimeout(function () {
+          root.classList.remove('hero-pending');
+          root.classList.remove('reveal-pending');
+        }, 4000);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>This reference requires JavaScript for its project selector and scripted Lain interface. No model service or personal information is loaded.</noscript>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
