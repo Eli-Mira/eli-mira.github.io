@@ -76,6 +76,10 @@ Two things GitHub Pages cannot do, and this site does not claim otherwise:
 set `X-Frame-Options`, and deliver `frame-ancestors`. Both need a front end
 in front of the site.
 
+The `_headers` file is served here as a plain file, because nothing reads
+it. That is harmless: it holds the same policy the page already carries in
+its meta tag, and a policy is not a secret.
+
 ## Layout
 
 ```
