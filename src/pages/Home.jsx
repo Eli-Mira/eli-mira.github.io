@@ -13,10 +13,12 @@ import { sections } from '../data/sections.js';
 import { learningPath } from '../data/origin.js';
 import { handleAnchorClick } from '../motion/scrollTo.js';
 import { releasePending } from '../motion/pending.js';
+import useActiveSection from '../motion/useActiveSection.js';
 
 export default function Home() {
   const motion = useMotionSettings();
   const [controller, setController] = useState(null);
+  const section = useActiveSection();
 
   useEffect(() => {
     let active = true;
@@ -81,7 +83,7 @@ export default function Home() {
           <span>Human direction / machine assistance</span>
         </div>
         <ul className="destinations" aria-label="Site sections">
-          {sections.map(section => <li key={section.id}><a href={`#${section.target}`} onClick={handleAnchorClick} data-destination={section.id}><b>{section.number}</b>{section.label}</a></li>)}
+          {sections.map(entry => <li key={entry.id}><a href={`#${entry.target}`} onClick={handleAnchorClick} data-destination={entry.id} aria-current={section === entry.id ? 'true' : undefined}><b>{entry.number}</b>{entry.label}</a></li>)}
         </ul>
       </div>
 
@@ -89,7 +91,7 @@ export default function Home() {
 
       <NeuralLab />
 
-      <section className="content profile-strip" id="system-profile" aria-labelledby="profile-title" data-reveal>
+      <section className="content profile-strip" id="system-profile" aria-labelledby="profile-title" data-reveal data-reveal-style="rise">
         <header className="section-head">
           <p className="section-index"><b>03</b> System Profile</p>
           <h2 id="profile-title">Tools behind the work.</h2>

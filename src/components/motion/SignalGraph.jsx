@@ -35,7 +35,11 @@ export default function SignalGraph() {
       })
       .catch(() => setFailed(true));
 
-    const unsubscribe = subscribeMotionState(() => field?.syncLoop());
+    const unsubscribe = subscribeMotionState(() => {
+      const { reduced, paused } = getMotionState();
+      canvas.dataset.render = paused || reduced ? 'held' : 'live';
+      field?.syncLoop();
+    });
 
     return () => {
       activeEffect = false;

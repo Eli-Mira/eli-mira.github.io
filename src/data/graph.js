@@ -55,8 +55,9 @@ export const graph = {
 };
 
 /**
- * Deterministic node positions on a shallow disc, grouped by kind so the
- * map reads as three bands rather than a cloud.
+ * Deterministic node positions on a wide ellipse, grouped by kind so the
+ * map reads as three bands rather than a cloud. The ellipse is wide because
+ * the panel it lives in is wide.
  */
 export function layoutGraph() {
   const positions = new Map();
@@ -65,14 +66,14 @@ export function layoutGraph() {
       const angle = phase + (index / nodes.length) * Math.PI * 2;
       positions.set(node.id, {
         x: Math.cos(angle) * radius,
-        y: Math.sin(angle) * radius * 0.62,
+        y: Math.sin(angle) * radius * 0.44,
         z: (index % 3) * 0.4 - 0.4,
       });
     });
   };
-  place(graph.concepts, 3.5, Math.PI / 2);
-  place(graph.tools, 2.25, Math.PI * 0.72);
-  place(graph.projects, 1.1, -Math.PI / 2);
+  place(graph.concepts, 5.2, Math.PI / 2);
+  place(graph.tools, 3.2, Math.PI * 0.72);
+  place(graph.projects, 1.5, -Math.PI / 2);
   return positions;
 }
 

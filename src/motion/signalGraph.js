@@ -14,6 +14,7 @@ import {
   Scene,
   SphereGeometry,
   Vector2,
+  Vector3,
   WebGLRenderer,
 } from 'three';
 import { graph, layoutGraph } from '../data/graph.js';
@@ -35,7 +36,7 @@ const GROUP_COLORS = {
   concept: '#c9c2c8',
 };
 
-const NODE_RADIUS = 0.12;
+const NODE_RADIUS = 0.19;
 
 export function createSignalGraph(canvas, { motion, onHover }) {
   let renderer;
@@ -55,18 +56,27 @@ export function createSignalGraph(canvas, { motion, onHover }) {
   if (renderer.domElement !== canvas) return null;
 
   const scene = new Scene();
-  const camera = new PerspectiveCamera(42, 1, 0.1, 60);
+  const camera = new PerspectiveCamera(46, 1, 0.1, 60);
   camera.position.set(0, 0, 8.4);
 
   const root = new Group();
   scene.add(root);
 
   const positions = layoutGraph();
+
+  // The real extent of the layout, so the camera can frame it exactly
+  // whatever the node set turns out to be.
+  let extentX = 1;
+  let extentY = 1;
+  for (const position of positions.values()) {
+    extentX = Math.max(extentX, Math.abs(position.x));
+    extentY = Math.max(extentY, Math.abs(position.y));
+  }
   const nodes = graph.projects.concat(graph.tools, graph.concepts);
   const pickable = [];
   const nodeMeshes = new Map();
 
-  const sphere = new SphereGeometry(NODE_RADIUS, 14, 12);
+  const sphere = new SphereGeometry(NODE_RADIUS, 16, 14);
   for (const node of nodes) {
     const position = positions.get(node.id);
     if (!position) continue;
@@ -91,7 +101,7 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     if (!a || !b) continue;
     linkPositions.push(a.x, a.y, a.z, b.x, b.y, b.z);
     const color = new Color(GROUP_COLORS.project);
-    linkColors.push(color.r, color.g, color.b, 0.22, color.r, color.g, color.b, 0.22);
+    linkColors.push(color.r, color.g, color.b, 0.62, color.r, color.g, color.b, 0.62);
   }
   const linkGeometry = new BufferGeometry();
   linkGeometry.setAttribute('position', new BufferAttribute(new Float32Array(linkPositions), 3));
@@ -99,6 +109,7 @@ export function createSignalGraph(canvas, { motion, onHover }) {
   const linkMaterial = new LineBasicMaterial({
     vertexColors: true,
     transparent: true,
+    opacity: 0.55,
     depthWrite: false,
     blending: AdditiveBlending,
   });
@@ -112,7 +123,8 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     visible: true,
     time: 0,
     hovered: null,
-    pointer: new Vector2(-2, -2),
+    pointer: new Vector2(0, 0),
+    pointerWorld: new Vector3(),
   };
 
   const raycaster = new Raycaster();
@@ -138,16 +150,41 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     camera.position.y = reduced ? 0 : -state.pointer.y * 0.4;
     camera.lookAt(0, 0, 0);
 
+    // The graph is laid out on a disc, so it is scaled to fit the frame
+    // rather than sitting in the middle of it with dead space around.
+    const viewHeight = 2 * Math.tan((46 * Math.PI) / 360) * camera.position.z;
+    const viewWidth = viewHeight * camera.aspect;
+    const fit = Math.min(viewWidth / (extentX * 2), viewHeight / (extentY * 2)) * 0.92;
+    root.scale.setScalar(fit);
+
     if (!reduced) {
-      root.rotation.y = state.time * 0.00007;
-      root.rotation.x = Math.sin(state.time * 0.00012) * 0.08;
+      // A slow sway rather than a spin: the map has to stay readable, and a
+      // full rotation would turn the wide ellipse edge-on.
+      root.rotation.y = Math.sin(state.time * 0.00011) * 0.26;
+      root.rotation.x = Math.sin(state.time * 0.00008) * 0.07;
     }
 
     for (const [id, mesh] of nodeMeshes) {
-      const target = state.hovered === id ? 1.9 : 1;
+      const hovered = state.hovered === id;
+      const dimmed = state.hovered && !hovered;
+      const target = hovered ? 1.9 : 1;
       const scale = mesh.scale.x + (target - mesh.scale.x) * 0.18;
       mesh.scale.setScalar(scale);
-      mesh.material.opacity = (mesh.userData.group === 'project' ? 1 : 0.82) * (state.hovered && state.hovered !== id ? 0.5 : 1);
+      mesh.material.opacity = (mesh.userData.group === 'project' ? 1 : 0.82) * (dimmed ? 0.4 : 1);
+    }
+
+    // A hovered node eases away from the pointer, so the connections to it
+    // open up and the relationship is legible without touching the labels.
+    if (state.hovered && !reduced) {
+      for (const [id, mesh] of nodeMeshes) {
+        if (id === state.hovered) continue;
+        const dx = mesh.position.x - state.pointerWorld.x;
+        const dy = mesh.position.y - state.pointerWorld.y;
+        const distance = Math.hypot(dx, dy) || 1;
+        const push = Math.max(0, 1.5 - distance) * 0.32;
+        mesh.position.x += (dx / distance) * push;
+        mesh.position.y += (dy / distance) * push;
+      }
     }
 
     renderer.render(scene, camera);
@@ -188,6 +225,10 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     const rect = canvas.getBoundingClientRect();
     state.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
     state.pointer.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    // The pointer is also tracked in world space, so nodes can move away from
+    // it rather than only being picked by it.
+    state.pointerWorld.set(state.pointer.x, state.pointer.y, 0.5).unproject(camera);
+    state.pointerWorld.sub(camera.position).normalize().multiplyScalar(12);
     pick();
   }
 

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { handleAnchorClick } from '../../motion/scrollTo.js';
+import useActiveSection from '../../motion/useActiveSection.js';
 
 const links = [
   ['Projects', '#projects'],
@@ -11,7 +12,7 @@ const links = [
 
 export default function Navigation({ paused, reduced, onMotionToggle }) {
   const [open, setOpen] = useState(false);
-  const [section, setSection] = useState('initialize');
+  const section = useActiveSection();
   const menu = useRef(null);
 
   useEffect(() => {
@@ -23,14 +24,9 @@ export default function Navigation({ paused, reduced, onMotionToggle }) {
     return () => document.removeEventListener('keydown', escape);
   }, [open]);
 
-  useEffect(() => {
-    function onSection(event) { setSection(event.detail); }
-    window.addEventListener('redline:section', onSection);
-    return () => window.removeEventListener('redline:section', onSection);
-  }, []);
-
   return <header className="site-header">
     <a className="wordmark" href="#initialize" onClick={handleAnchorClick} aria-label="Redline Overdrive home">REDLINE<span><i>//</i> OVERDRIVE</span></a>
+    <div className="header-progress" aria-hidden="true"><span data-progress-fill /></div>
     <nav id="main-navigation" className={`navigation${open ? ' is-open' : ''}`} aria-label="Main navigation">
       {links.map(([label, href]) => <a key={href} href={href} onClick={event => { setOpen(false); handleAnchorClick(event); }} aria-current={section === href.slice(1) ? 'true' : undefined}>{label}</a>)}
     </nav>

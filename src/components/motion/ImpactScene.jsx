@@ -59,7 +59,13 @@ export default function ImpactScene() {
     hero.addEventListener('pointermove', move, { passive: true });
     hero.addEventListener('pointerleave', leave);
 
-    const unsubscribe = subscribeMotionState(() => field?.syncLoop());
+    const unsubscribe = subscribeMotionState(() => {
+      const { reduced, paused } = getMotionState();
+      // The loop stops on its own, so the label is updated here rather than
+      // waiting for a frame that will never be drawn.
+      canvas.dataset.render = paused || reduced ? 'held' : 'live';
+      field?.syncLoop();
+    });
 
     return () => {
       active = false;

@@ -10,7 +10,7 @@ const SignalGraph = lazy(() => import('../components/motion/SignalGraph.jsx'));
 export default function NeuralLab() {
   const [loaded, setLoaded] = useState(false);
 
-  return <section className="lab" id="neural-lab" aria-labelledby="lab-title" data-reveal>
+  return <section className="lab" id="neural-lab" aria-labelledby="lab-title" data-reveal data-reveal-style="slide">
     <div className="content lab-layout">
       <div data-reveal-item>
         <p className="section-index"><b>02</b> Neural Lab</p>

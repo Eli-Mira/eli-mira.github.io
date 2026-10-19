@@ -19,7 +19,7 @@ export default function Projects() {
     document.getElementById(`project-tab-${id}`).focus();
   }
 
-  return <section className="content projects-section" id="projects" aria-labelledby="projects-title" data-reveal>
+  return <section className="content projects-section" id="projects" aria-labelledby="projects-title" data-reveal data-reveal-style="slide">
     <header className="section-head">
       <p className="section-index"><b>01</b> Operations</p>
       <h2 id="projects-title">The work.</h2>

@@ -225,6 +225,61 @@ try {
     assert.equal(await page.getByRole('button', { name: 'Menu', exact: true }).getAttribute('aria-expanded'), 'false');
   });
 
+  await check('primary-action-sweeps-a-fill-on-hover', async () => {
+    const cta = page.locator('.hero-copy .action.primary');
+    const fill = () => cta.evaluate(node => getComputedStyle(node, '::before').transform);
+    const before = await fill();
+    await cta.hover();
+    await page.waitForTimeout(600);
+    const after = await fill();
+    assert.notEqual(before, after, 'The action fill did not move on hover');
+  });
+
+  await check('navigation-links-draw-an-underline-on-hover', async () => {
+    // The navigation collapses below 768px, so this runs at desktop width.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await ready(page);
+    const link = page.locator('.navigation a').first();
+    const rule = () => link.evaluate(node => getComputedStyle(node, '::after').transform);
+    const before = await rule();
+    await link.hover();
+    await page.waitForTimeout(500);
+    assert.notEqual(before, await rule(), 'The navigation underline did not appear on hover');
+  });
+
+  await check('the-reading-progress-bar-tracks-the-scroll', async () => {
+    const bar = page.locator('[data-progress-fill]');
+    assert.equal(await bar.count(), 1);
+    const width = () => bar.evaluate(node => node.getBoundingClientRect().width);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(700);
+    const atTop = await width();
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(900);
+    const atBottom = await width();
+    assert.ok(atBottom > atTop + 20, `Progress did not advance: ${atTop} -> ${atBottom}`);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(600);
+  });
+
+  await check('the-signal-graph-renders-lit-nodes-and-links', async () => {
+    await page.evaluate(() => document.querySelector('#neural-lab')?.scrollIntoView());
+    await page.waitForTimeout(1200);
+    const painted = await page.evaluate(() => {
+      const canvas = document.querySelector('.signal-graph-canvas canvas');
+      if (!canvas) return { lit: 0, total: 0 };
+      const copy = document.createElement('canvas');
+      copy.width = canvas.width;
+      copy.height = canvas.height;
+      copy.getContext('2d').drawImage(canvas, 0, 0);
+      const { data } = copy.getContext('2d').getImageData(0, 0, copy.width, copy.height);
+      let lit = 0;
+      for (let index = 3; index < data.length; index += 4) if (data[index] > 10) lit += 1;
+      return { lit, total: data.length / 4 };
+    });
+    assert.ok(painted.lit > 200, `Signal graph drew only ${painted.lit} lit pixels`);
+  });
+
   await check('contact-channels-match-the-published-site', async () => {
     const links = await page.locator('.contact-list a').evaluateAll(nodes => nodes.map(node => node.getAttribute('href')));
     assert.deepEqual(links, [
@@ -254,7 +309,25 @@ try {
     assert.equal(await canvas.evaluate(node => node.toDataURL()), image);
     const opacity = await reduced.locator('.impact-name').evaluate(node => Number(getComputedStyle(node).opacity));
     assert.equal(opacity, 1);
+    // Nothing may be left hidden when motion is reduced.
+    const hidden = await reduced.evaluate(() => [...document.querySelectorAll('[data-reveal-item]')]
+      .filter(node => Number(getComputedStyle(node).opacity) < 0.99).length);
+    assert.equal(hidden, 0, `${hidden} elements stayed hidden under reduced motion`);
     await reduced.close();
+  });
+
+  await check('pause-freezes-the-scene-and-releases-hidden-content', async () => {
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.waitForTimeout(700);
+    await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
+    await page.waitForTimeout(500);
+    assert.equal(await page.locator('canvas.impact-scene').evaluate(node => node.dataset.render), 'held');
+    assert.equal(await page.getByRole('button', { name: 'Resume motion', exact: true }).getAttribute('aria-pressed'), 'true');
+    // Pausing must never strand content at zero opacity.
+    const hidden = await page.evaluate(() => [...document.querySelectorAll('[data-reveal-item]')]
+      .filter(node => Number(getComputedStyle(node).opacity) < 0.99).length);
+    assert.equal(hidden, 0, `${hidden} elements stayed hidden while paused`);
+    await page.getByRole('button', { name: 'Resume motion', exact: true }).click();
   });
 
   await check('normal-flows-have-clean-console-and-local-only-requests', async () => {

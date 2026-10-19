@@ -28,6 +28,9 @@ function releaseHiddenContent() {
   // runtime goes away, whether it stopped or never started.
   releasePending();
   gsap.set('[data-hero-line], [data-reveal-item]', { clearProps: 'all' });
+  gsap.set('[data-reveal-item]', { clipPath: 'none' });
+  gsap.set('.section-head h2', { clearProps: 'all' });
+  gsap.set('.destinations a', { clearProps: 'all' });
 }
 
 export function startMotion({ reduced = false } = {}) {
@@ -84,11 +87,24 @@ export function startMotion({ reduced = false } = {}) {
     // ── Section reveals ────────────────────────────────────────────────────
     // Opacity is used rather than visibility, so content that is still below
     // the fold stays reachable by keyboard and assistive technology.
+    //
+    // Each section is given its own entrance rather than one repeated move:
+    // a rise for prose, a slide for rails and lists, and a wipe for the
+    // section headings. The same rule covers the destination strip.
+    const REVEAL_STYLES = {
+      rise: { from: { opacity: 0, y: 26 }, duration: 0.8, ease: 'power3.out' },
+      slide: { from: { opacity: 0, x: -22 }, duration: 0.75, ease: 'power3.out' },
+      wipe: { from: { opacity: 0, clipPath: 'inset(0 0 100% 0)' }, duration: 0.9, ease: 'power4.out' },
+    };
+
     gsap.utils.toArray('[data-reveal]').forEach((section) => {
       const items = section.querySelectorAll('[data-reveal-item]');
       const targets = items.length ? items : [section];
-      gsap.set(targets, { opacity: 0, y: 26 });
-      pending.set(section, targets);
+      const style = REVEAL_STYLES[section.dataset.revealStyle ?? 'rise'];
+
+      gsap.set(targets, style.from);
+      pending.set(section, { targets, style });
+
       ScrollTrigger.create({
         trigger: section,
         start: 'top 85%',
@@ -96,10 +112,18 @@ export function startMotion({ reduced = false } = {}) {
         onEnter: () => {
           pending.delete(section);
           if (getMotionState().paused) {
-            gsap.set(targets, { opacity: 1, y: 0 });
+            gsap.set(targets, { opacity: 1, y: 0, x: 0, clipPath: 'none' });
             return;
           }
-          gsap.to(targets, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out', stagger: 0.06 });
+          gsap.to(targets, {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            clipPath: 'none',
+            duration: style.duration,
+            ease: style.ease,
+            stagger: 0.06,
+          });
         },
       });
     });
@@ -143,6 +167,35 @@ export function startMotion({ reduced = false } = {}) {
       ease: 'none',
       scrollTrigger: { trigger: '#initialize', start: 'top top', end: 'bottom top', scrub: 0.6 },
     });
+
+    // The headline leaves the frame at a different rate from the copy, which
+    // gives the hero a sense of depth as the page moves under it.
+    gsap.to('[data-hero-line]', {
+      yPercent: -18,
+      ease: 'none',
+      scrollTrigger: { trigger: '#initialize', start: 'top top', end: 'bottom top', scrub: 0.8 },
+    });
+
+    // ── Section headings settle as their section arrives ──────────────────
+    gsap.utils.toArray('.section-head h2').forEach((heading) => {
+      gsap.set(heading, { opacity: 0, y: 18 });
+      ScrollTrigger.create({
+        trigger: heading,
+        start: 'top 88%',
+        once: true,
+        onEnter: () => {
+          if (getMotionState().paused) {
+            gsap.set(heading, { opacity: 1, y: 0 });
+            return;
+          }
+          gsap.to(heading, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
+        },
+      });
+    });
+
+    // ── The destination strip marks where the reader is ───────────────────
+    // The strip lives in React and reads the same section event as the
+    // header, so the marker works whether or not motion is running.
   });
 
   registerScrollController({
@@ -163,7 +216,9 @@ export function startMotion({ reduced = false } = {}) {
       // that pausing never strands content at zero opacity.
       gsap.globalTimeline.timeScale(paused ? 0.001 : 1);
       if (paused) {
-        pending.forEach((targets) => gsap.set(targets, { opacity: 1, y: 0 }));
+        pending.forEach(({ targets }) => {
+          gsap.set(targets, { opacity: 1, y: 0, x: 0, clipPath: 'none' });
+        });
       }
     },
     destroy() {
