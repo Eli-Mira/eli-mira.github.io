@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
+import { hashFile } from '../scripts/file-hash.js';
 
 const root = path.resolve(import.meta.dirname, '..');
 
@@ -46,7 +46,7 @@ const added = new Set(
     .filter(Boolean),
 );
 
-const sha = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+const sha = file => hashFile(file);
 
 /** The same file selection the release manifest uses, so the two agree. */
 const SKIP = new Set(['node_modules', 'dist', '.git', '.scratch', 'artifacts', 'evidence']);

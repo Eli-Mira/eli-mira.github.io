@@ -8,8 +8,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { hashFile } from './file-hash.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'tests/released-manifest.json');
@@ -30,7 +30,7 @@ function walk(relative = '') {
     const key = next.split(path.sep).join('/');
     // The manifest cannot record its own hash, so it is left out of itself.
     if (key === path.relative(root, output).split(path.sep).join('/')) continue;
-    manifest[key] = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, next))).digest('hex');
+    manifest[key] = hashFile(path.join(root, next));
   }
 }
 
