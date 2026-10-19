@@ -1,15 +1,26 @@
 :root {
   color-scheme: dark;
 
-  /* Palette — brief-specified, unchanged. */
-  --void: #09090c;
-  --carbon: #17171d;
-  --blood: #c31632;
-  --signal: #ff3347;
-  --bone: #f2f0ef;
-  --muted: #a8a4a8;
-  --line: #363039;
-  --deep-cut: #230911;
+  /* Palette — acidwave.
+     One accent means something. Magenta is the brand and the calls to
+     action, cyan is the machine, acid green is the live state, and violet
+     is the chrome everything is built from. The first three are rationed
+     on purpose, so a page full of them would say nothing. */
+  --void: #0a0614;
+  --carbon: #160d2b;
+  --blood: #a3113f;
+  --signal: #ff2e88;
+  --cyan: #2ee6ff;
+  --acid: #c8ff3c;
+  --violet: #7b3bf5;
+  --bone: #f4f1ff;
+  --muted: #a89cc8;
+  --line: #2e1c4d;
+  --deep-cut: #1c1136;
+
+  /* Glow. A light source, not a shadow. */
+  --glow-signal: 0 0 18px rgba(255, 46, 136, .38);
+  --glow-cyan: 0 0 22px rgba(46, 230, 255, .32);
 
   /* Type. Self-hosted faces only; no system display fallback in use. */
   --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
@@ -41,6 +52,17 @@
   --gutter: clamp(24px, 5vw, 80px);
   --measure: 1320px;
   --header-h: 76px;
+
+  /* The cut corner. Console hardware has chamfers, not rounded corners. */
+  --chamfer: 12px;
+  --cut: polygon(
+    0 0,
+    calc(100% - var(--chamfer)) 0,
+    100% var(--chamfer),
+    100% 100%,
+    var(--chamfer) 100%,
+    0 calc(100% - var(--chamfer))
+  );
 
   /* Motion. */
   --duration: 180ms;

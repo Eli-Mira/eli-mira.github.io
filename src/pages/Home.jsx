@@ -58,6 +58,7 @@ export default function Home() {
           <div className="impact-cut" />
           <div className="impact-slash" />
           <img className="figure" src={`${import.meta.env.BASE_URL}artwork/eli-abstract.svg`} alt="" width="540" height="820" fetchPriority="high" />
+          <div className="horizon" aria-hidden="true" />
           <div className="impact-name" aria-hidden="true">ELI</div>
           <span className="figure-label">Original abstract figure / not a portrait</span>
         </div>

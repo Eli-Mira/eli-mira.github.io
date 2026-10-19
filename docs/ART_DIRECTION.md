@@ -1,8 +1,57 @@
 # ART DIRECTION — B / Impact frame
 
-**Status:** Phase 2 production art direction (approved).  
+**Status:** Phase 2 production art direction (approved), revised for the
+acidwave main design (owner instruction, 20 October 2026).  
 **Reference:** `MASTER_BRIEF.md`, `../ART_DIRECTION.md` (Phase 1), `../proposals/b-impact-frame.html`, `../proposals/prototype.css`.  
 **Approved by:** Eli (owner). Phase 3 reference implementation must match this document.
+
+---
+
+## 0. The acidwave revision
+
+The composition, the identity contract and every boundary below are
+unchanged. The palette and the surface treatment are not: the main design
+is now acidwave.
+
+**What changed**
+
+- The palette moved from crimson on near-black to a night sky: a violet
+  canvas, magenta for the brand, cyan for the machine, acid green for the
+  live state, and violet for all the chrome. The token list and the
+  measured contrast table are in `DESIGN_SYSTEM.md` section 2.
+- The impact field is now a banded sunset gradient rather than a flat
+  crimson block, so the figure is silhouetted against a sky.
+- A perspective grid runs away to a horizon at the base of the hero, with a
+  cyan line along it and the grid drifting towards the reader.
+- The headline is chrome: a white-to-cyan-to-magenta gradient clipped to the
+  type, with a hard offset shadow the way a game box sets its own cover
+  type. The footer heading answers it, so the page opens and closes on the
+  same moment.
+- The whole page carries the scan lines of an old display.
+- Corners are cut rather than rounded, the way console faceplates are
+  chamfered.
+
+**What did not change**
+
+The identity contract in section 1 holds exactly as written. The figure is
+still the same anonymous faceted silhouette. Lain is still an ASCII signal
+identity and still not a live model. The narrative line is still literal.
+The boundaries on biography, metrics, model inventory and repository
+secrets are untouched.
+
+**Where the reference came from**
+
+Two design systems were read for structure, and one aesthetic was chosen for
+the surface. PlayStation's system gave the chapter rhythm — full-bleed
+bands that change the page's surface instead of decorating it — and its
+discipline of one accent used sparingly. Nintendo's 2001 system gave the
+console-hardware metaphor: chamfered panels instead of rounded ones, a
+carbon authority layer, warmth rationed to mean "action", and outlined
+display type with a hard drop shadow. The acidwave palette and the horizon
+grid are the aesthetic itself.
+
+Nothing was copied. The palette, the type and the composition are this
+site's own.
 
 ---
 
@@ -122,25 +171,33 @@ The hero stacks vertically. The headline and actions read first; the figure post
 
 ## 4. Color roles
 
-All tokens map directly to the Phase 1 palette. Roles are semantic, not decorative.
+All tokens map directly to the acidwave palette in `DESIGN_SYSTEM.md`
+section 2. Roles are semantic, not decorative.
 
 | Token | Value | Role |
 |---|---|---|
-| `--void` | `#09090C` | Page background, primary surface |
-| `--carbon` | `#17171D` | Card/elevated surface, header bar |
-| `--blood` | `#C31632` | Main diagonal field, primary accent area |
-| `--signal` | `#FF3347` | Emphasis, active states, CTA outline, Lain highlights |
-| `--bone` | `#F2F0EF` | Primary text, headings, inverse-button fill |
-| `--muted` | `#A8A4A8` | Secondary text, annotations, disabled states |
-| `--line` | `#363039` | Borders, dividers, grid overlays |
-| `--deep-cut` | `#230911` | Dark cut zone inside the crimson field (shadow layer) |
-| `--highlight` | `#FF92A5` | Canvas projected ring stroke, sub-accent |
+| `--void` | `#0A0614` | Page background, primary surface |
+| `--carbon` | `#160D2B` | Card/elevated surface, header bar |
+| `--blood` | `#A3113F` | Solid fill behind the primary action, the deep end of the sky |
+| `--signal` | `#FF2E88` | The brand. Emphasis, active states, the calls to action |
+| `--cyan` | `#2EE6FF` | The machine. Lain, the console, the chain, the horizon line |
+| `--acid` | `#C8FF3C` | The live state, and nothing else |
+| `--violet` | `#7B3BF5` | Depth. The chrome gradient, the concept nodes |
+| `--bone` | `#F4F1FF` | Primary text, headings, inverse-button fill |
+| `--muted` | `#A89CC8` | Secondary text, annotations, disabled states |
+| `--line` | `#2E1C4D` | Borders, dividers, panel hairlines |
+| `--deep-cut` | `#1C1136` | Dark cut zone inside the impact field (shadow layer) |
 
 **Semantic application:**
-- `--blood` and `--deep-cut` are used **only** in the hero impact-field geometry. They do not appear as background color on project cards or panels elsewhere in the portfolio.
-- `--signal` marks meaningful interactive state: focus-visible outline, selected tab shadow, active button fill.
-- `--bone` is the text color for headlines and body copy. Muted body copy may use `--muted` at a minimum contrast of 4.5:1.
-- `--line` defines structural boundaries (grid overlays, section dividers, tab borders) — never as decoration.
+- The three accents are kept apart on purpose. `--signal` is the brand and
+  never carries body text. `--cyan` is the machine and never carries a call
+  to action. `--acid` appears in the section indexes and nowhere else, so
+  that it still means something when it turns up.
+- `--bone` is the text colour for headlines and body copy. Muted body copy
+  may use `--muted` at a minimum contrast of 4.5:1.
+- `--line` defines structural boundaries — never as decoration.
+- Gradients are used in three places only: the chrome headline, the
+  brandline band and the closing band. Body copy is never set in one.
 
 ---
 
@@ -151,19 +208,36 @@ B / Impact frame uses sharp-to-chamfered angles, never soft rounded corners on m
 | Element | Treatment |
 |---|---|
 | Hero impact field | Clip-path polygon with a hard diagonal; no border-radius |
-| Action buttons | 2px chamfer on the leading (left for LTR) corners only |
+| Action buttons | 12px chamfer on the top-right and bottom-left corners, via `--cut` |
 | Project tab selected state | `box-shadow: inset 3px 0 var(--blood)` — colored bar, not a border |
+| Project status pill | 6px chamfer, a small version of `--cut` |
 | Lain console panel | 1px solid `#5b2434` border; 0px border-radius |
 | Project archive cards | None (tab/detail pattern, not cards) |
 | Skip-link | Rectangular, 0px border-radius |
-| Motion toggle | 0px border-radius, 1px border `#4c3c44` |
+| Motion toggle | 0px border-radius, 1px border `#453a63` |
 
-Chamfer spec (2px):
-```
-clip-path: polygon(0 0, calc(100% - 2px) 0, 100% 2px, 100% 100%, 2px 100%, 0 calc(100% - 2px));
+Chamfer spec:
+```css
+:root { --chamfer: 12px; }
+--cut: polygon(
+  0 0,
+  calc(100% - var(--chamfer)) 0,
+  100% var(--chamfer),
+  100% 100%,
+  var(--chamfer) 100%,
+  0 calc(100% - var(--chamfer))
+);
 ```
 
-Apply chamfer only to interactive surfaces (buttons, tab triggers with active state). Do not chamfer decorative polygons or the impact field itself — those stay sharp.
+Apply the chamfer to the interactive surfaces. An outlined button paints its
+own edge with a gradient so the cut does not leave the border open:
+```css
+background: linear-gradient(#1a1033, #1a1033) padding-box,
+            linear-gradient(135deg, var(--cyan), var(--violet)) border-box;
+```
+
+Do not chamfer decorative polygons or the impact field itself — those stay
+sharp.
 
 ---
 

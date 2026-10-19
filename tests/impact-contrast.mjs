@@ -22,7 +22,7 @@ const pairs=await page.evaluate(()=>{
 });
 await browser.close();
 const computed=pairs.map(p=>({...p,ratio:ratio(p.foreground,p.background),AA_normal:ratio(p.foreground,p.background)>=4.5}));
-const correctionPairs=[['#BCB5BB','#09090C'],['#b5a5af','#17171D'],['#A8A4A8','#09090C'],['#F2F0EF','#C31632'],['#FF3347','#09090C'],['#FF3347','#C31632']].map(([foreground,background])=>({foreground,background,ratio:ratio(foreground,background),AA_normal:ratio(foreground,background)>=4.5}));
+const correctionPairs=[['#C9C1D4','#0A0614'],['#C7BED3','#160D2B'],['#A89CC8','#0A0614'],['#F4F1FF','#A3113F'],['#FF2E88','#0A0614'],['#2EE6FF','#0A0614'],['#C8FF3C','#0A0614']].map(([foreground,background])=>({foreground,background,ratio:ratio(foreground,background),AA_normal:ratio(foreground,background)>=4.5}));
 fs.writeFileSync(output,JSON.stringify({url,computed,correctionPairs,limits:'This checks exact solid pairs, not full WCAG conformance. Gradient/image overlaps require screenshot inspection or pixel sampling.'},null,2));
 console.log(JSON.stringify({computed,correctionPairs},null,2));
 process.exitCode=computed.some(p=>!p.AA_normal)?1:0;

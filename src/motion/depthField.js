@@ -42,8 +42,8 @@ const FIELD_OF_VIEW = 46;
 function buildFrames() {
   const positions = [];
   const colors = [];
-  const near = new Color('#ff5a6c');
-  const far = new Color('#6d0a1e');
+  const near = new Color('#ff2e88');
+  const far = new Color('#3b0a5e');
   const scratch = new Color();
   const corners = [];
 
@@ -59,7 +59,7 @@ function buildFrames() {
     const mix = 1 - index / FRAME_COUNT;
 
     scratch.copy(far).lerp(near, mix);
-    const alpha = 0.2 + mix * 0.7;
+    const alpha = 0.34 + mix * 0.66;
 
     const ring = [[-halfWidth, -halfHeight], [halfWidth, -halfHeight], [halfWidth, halfHeight], [-halfWidth, halfHeight]]
       .map(([x, y]) => [x * cos - y * sin, x * sin + y * cos, -depth]);
@@ -74,13 +74,13 @@ function buildFrames() {
   }
 
   // Rails join matching corners, so the frames read as one tunnel.
-  const rail = new Color('#c21730');
+  const rail = new Color('#2ee6ff');
   for (let index = 0; index < FRAME_COUNT - 1; index += 1) {
     for (let edge = 0; edge < 4; edge += 1) {
       const a = corners[index][edge];
       const b = corners[index + 1][edge];
       positions.push(...a, ...b);
-      colors.push(rail.r, rail.g, rail.b, 0.42, rail.r, rail.g, rail.b, 0.42);
+      colors.push(rail.r, rail.g, rail.b, 0.8, rail.r, rail.g, rail.b, 0.8);
     }
   }
 
@@ -124,7 +124,7 @@ export function createDepthField(canvas, { motion }) {
   if (renderer.domElement !== canvas) return null;
 
   const scene = new Scene();
-  scene.fog = new FogExp2(0x0a0508, 0.052);
+  scene.fog = new FogExp2(0x0a0614, 0.052);
 
   const camera = new PerspectiveCamera(FIELD_OF_VIEW, 1, 0.1, 90);
   camera.position.set(0, 0, 6.2);
@@ -145,7 +145,7 @@ export function createDepthField(canvas, { motion }) {
     -1.6, -2.1, -20.5, 1.6, 2.1, -20.5, -1.6, 2.1, -20.5,
   ]), 3));
   const slabMaterial = new MeshBasicMaterial({
-    color: new Color('#3d0512'),
+    color: new Color('#1a0830'),
     transparent: true,
     opacity: 0.9,
     depthWrite: false,
@@ -154,7 +154,7 @@ export function createDepthField(canvas, { motion }) {
 
   const dustGeometry = buildDust();
   const dustMaterial = new PointsMaterial({
-    color: new Color('#ff6d7d'),
+    color: new Color('#ff6bb0'),
     size: 0.035,
     transparent: true,
     opacity: 0.65,

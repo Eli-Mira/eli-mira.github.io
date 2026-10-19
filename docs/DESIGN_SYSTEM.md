@@ -19,44 +19,72 @@ All values below are consumed through Tailwind CSS v4 theme variables or as CSS 
 
 ```css
 :root {
-  --void:    #09090C;
-  --carbon:  #17171D;
-  --blood:   #C31632;
-  --signal:  #FF3347;
-  --bone:    #F2F0EF;
-  --muted:   #A8A4A8;
-  --line:    #363039;
-  --deep-cut:#230911;
-  --highlight:#FF92A5;
+  --void:    #0A0614;
+  --carbon:  #160D2B;
+  --blood:   #A3113F;
+  --signal:  #FF2E88;
+  --cyan:    #2EE6FF;
+  --acid:    #C8FF3C;
+  --violet:  #7B3BF5;
+  --bone:    #F4F1FF;
+  --muted:   #A89CC8;
+  --line:    #2E1C4D;
+  --deep-cut:#1C1136;
+  --glow-signal: 0 0 18px rgba(255, 46, 136, .38);
+  --glow-cyan:   0 0 22px rgba(46, 230, 255, .32);
+  --chamfer: 12px;
 }
 ```
+
+The palette is acidwave, and it is rationed on purpose. One accent means
+something, so the roles are kept apart:
+
+| Voice | Colour | What it speaks for |
+|---|---|---|
+| The brand | `--signal` magenta | The name, the calls to action, the accent geometry |
+| The machine | `--cyan` | Lain, the console, the lab, the tool nodes in the map |
+| The live state | `--acid` | The section indexes and nothing else |
+| The chrome | `--violet` and `--line` | Every surface, border and rule the other three sit on |
 
 ### 2.2 Semantic roles
 
 | Token | Semantic role | Where it appears | Where it does NOT appear |
 |---|---|---|---|
-| `--void` | Page canvas, primary background | `body`, `<main>` bg | Never on interactive surfaces (use `--carbon` instead) |
+| `--void` | Page canvas, primary background | `body`, section backgrounds | Never on interactive surfaces (use `--carbon` instead) |
 | `--carbon` | Elevated surface, header, console panel bg | Site header, Lain console, tab list bg | Never as body text background without a border |
-| `--blood` | Impact field, selected-tab inset shadow | Hero left diagonal, tab `aria-selected` highlight | Never as text color or as section background outside hero |
-| `--signal` | Active/selected state, accent highlights | Focus-visible fallback, `i` in wordmark, status badges, tab shadow | Never as primary text color (contrast is too low on carbon) |
-| `--bone` | Primary text, inverse button fill | Headlines, body copy, skip-link bg | Never on `--blood` without a backing (see Figure disclaimer fix) |
-| `--muted` | Secondary text, annotations | Captions, disclosure lines, disabled states | Never as the only means of conveying information (pair with icon or label) |
-| `--line` | Structural boundaries | Grid overlays, section dividers, tab borders | Never as a fill color |
-| `--deep-cut` | Shadow layer inside impact field | Hero inner cut polygon | Never outside the hero |
-| `--highlight` | Sub-accent for decorative geometry | Canvas ring stroke | Never as text or interactive state color |
+| `--blood` | Impact field fill, solid button fill | Hero sky, primary action | Never as text colour (the accent is `--signal`) |
+| `--signal` | Active/selected state, accent highlights | Wordmark slashes, progress bar, nav underline, focus ring | Never as small body text on `--carbon` |
+| `--cyan` | The machine | ASCII console, chain steps, tool nodes, the horizon line | Never as a call to action |
+| `--acid` | The live state | Section index numbers | Nowhere else |
+| `--bone` | Primary text, inverse button fill | Headlines, body copy, skip-link bg | Never on `--blood` without a backing |
+| `--muted` | Secondary text, annotations | Captions, disclosure lines, disabled states | Never as the only means of conveying information |
+| `--line` | Structural boundaries | Section dividers, tab borders, panel hairlines | Never as a fill colour |
+| `--deep-cut` | Shadow layer inside the impact field | Hero inner cut polygon | Never outside the hero |
 
 ### 2.3 Contrast requirements
 
+Measured with `tests/impact-contrast.mjs` against the built site, not by eye.
+
 | Foreground | Background | Ratio | Pass |
 |---|---|---|---|
-| `--bone` (#F2F0EF) | `--void` (#09090C) | 15.8:1 | AA ✓ AAA ✓ |
-| `--bone` (#F2F0EF) | `--carbon` (#17171D) | 14.9:1 | AA ✓ AAA ✓ |
-| `#d0c9cf` (raised body) | `--void` (#09090C) | 5.2:1 | AA ✓ AAA ✗ (large text only) |
-| `--signal` (#FF3347) | `--void` (#09090C) | 4.6:1 | AA ✓ |
-| `--muted` (#A8A4A8) | `--void` (#09090C) | 4.1:1 | AA ✗ — never used alone for body text |
-| `#ff8798` (status badge) | `#37111f` (badge bg) | 5.8:1 | AA ✓ |
+| `--bone` (#F4F1FF) | `--void` (#0A0614) | 18.0:1 | AA ✓ AAA ✓ |
+| `--bone` (#F4F1FF) | `--carbon` (#160D2B) | 16.8:1 | AA ✓ AAA ✓ |
+| `--bone` (#F4F1FF) | `--blood` (#A3113F) | 7.0:1 | AA ✓ AAA ✗ |
+| `#c9c1d4` (raised body) | `--void` (#0A0614) | 11.5:1 | AA ✓ AAA ✓ |
+| `--signal` (#FF2E88) | `--void` (#0A0614) | 5.7:1 | AA ✓ |
+| `--muted` (#A89CC8) | `--void` (#0A0614) | 7.9:1 | AA ✓ AAA ✗ |
+| `--cyan` (#2EE6FF) | `--void` (#0A0614) | 13.2:1 | AA ✓ AAA ✓ |
+| `--acid` (#C8FF3C) | `--void` (#0A0614) | 17.0:1 | AA ✓ AAA ✓ |
+| `#ffa0d4` (status badge) | `#3a1130` (badge bg) | 8.6:1 | AA ✓ |
 
 **Rule:** `--muted` may appear on `--void` only for non-essential annotations (≤12px, decorative labels). Body copy and headings must meet AA (4.5:1) minimum. This is a hard gate — no exceptions for aesthetics.
+
+**The chrome headline is an exception with a reason.** The hero `h1` and the
+footer `h2` are filled with a gradient and clipped to the text, so a single
+ratio does not describe them. Their lightest stop is `#ffffff` on `--void`
+(21:1) and their darkest is `#a3113f` on `--void` (3.3:1), which is below
+AA for body text and above the 3:1 floor for large text. Both are display
+type at 42px and over. The body of the page never uses a gradient.
 
 ---
 

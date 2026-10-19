@@ -32,9 +32,9 @@ import { pushOffset } from './nodePush.js';
  */
 
 const GROUP_COLORS = {
-  project: '#ff4055',
-  tool: '#ff8b9b',
-  concept: '#c9c2c8',
+  project: '#ff2e88',
+  tool: '#2ee6ff',
+  concept: '#a78bfa',
 };
 
 const NODE_RADIUS = 0.19;
@@ -107,8 +107,8 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     if (!a || !b) continue;
     linkPairs.push([from, to]);
     linkPositions.push(a.x, a.y, a.z, b.x, b.y, b.z);
-    const color = new Color(GROUP_COLORS.project);
-    linkColors.push(color.r, color.g, color.b, 0.62, color.r, color.g, color.b, 0.62);
+    const color = new Color(GROUP_COLORS.tool);
+    linkColors.push(color.r, color.g, color.b, 0.85, color.r, color.g, color.b, 0.85);
   }
   const linkGeometry = new BufferGeometry();
   const linkAttribute = new BufferAttribute(new Float32Array(linkPositions), 3);
