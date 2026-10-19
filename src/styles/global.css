@@ -299,8 +299,15 @@ button:disabled { cursor: default; opacity: .6; }
 .section-head p { max-width: 62ch; margin: 0; color: #bcb5bb; font-size: 14px; }
 
 /* ── Operations: the project archive ────────────────────────────────────── */
-.project-archive { display: grid; grid-template-columns: 1.15fr 1fr; border-block: 1px solid var(--line); }
-.project-tabs { display: flex; flex-direction: column; order: 2; border-left: 1px solid var(--line); }
+.project-archive { display: grid; grid-template-columns: 1.15fr 1fr; align-items: start; border-block: 1px solid var(--line); }
+.project-tabs {
+  position: sticky;
+  top: calc(var(--header-h) + var(--space-4));
+  display: flex;
+  flex-direction: column;
+  order: 2;
+  border-left: 1px solid var(--line);
+}
 .project-tabs button {
   display: flex;
   align-items: center;
@@ -538,7 +545,7 @@ html.reveal-pending [data-reveal-item] { opacity: 0; }
   .section-head h2 { font-size: 42px; }
   .section-head p { font-size: 12px; }
   .project-archive { grid-template-columns: 1fr; }
-  .project-tabs { order: 0; border-left: 0; border-bottom: 1px solid var(--line); }
+  .project-tabs { position: static; order: 0; border-left: 0; border-bottom: 1px solid var(--line); }
   .project-tabs button { min-height: 88px; padding: 18px 10px; flex-wrap: nowrap; font-size: 13px; }
   .project-tabs small { max-width: 155px; font-size: 9px; }
   .project-state { max-width: 100px; font-size: 9px; text-align: right; }
