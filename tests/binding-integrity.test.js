@@ -39,8 +39,35 @@ const changed = new Set(
     .map(entry => entry.trim())
     .filter(Boolean),
 );
+const added = new Set(
+  (process.env.REDLINE_ADDED ?? '')
+    .split(',')
+    .map(entry => entry.trim())
+    .filter(Boolean),
+);
 
 const sha = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
+
+/** The same file selection the release manifest uses, so the two agree. */
+const SKIP = new Set(['node_modules', 'dist', '.git', '.scratch', 'artifacts', 'evidence']);
+const SOURCE = /\.(jsx?|mjs|css|html|json|svg|woff2|ttf|ico|txt|md|yml)$/;
+
+function treeFiles(relative = '') {
+  const absolute = path.join(root, relative);
+  if (!fs.existsSync(absolute)) return [];
+  const found = [];
+  for (const entry of fs.readdirSync(absolute, { withFileTypes: true })) {
+    if (SKIP.has(entry.name)) continue;
+    const next = path.join(relative, entry.name);
+    if (entry.isDirectory()) {
+      found.push(...treeFiles(next));
+      continue;
+    }
+    if (!SOURCE.test(entry.name)) continue;
+    found.push(next.split(path.sep).join('/'));
+  }
+  return found;
+}
 
 test('The recorded baseline still matches its manifest', { skip: !baselinePath }, () => {
   for (const [file, hash] of Object.entries(manifest)) {
@@ -60,4 +87,20 @@ test('Everything outside the declared change scope is byte-identical to the base
   for (const [file, hash] of protectedEntries) {
     assert.equal(sha(path.join(root, file)), hash, `Out-of-scope mutation: ${file}`);
   }
+});
+
+test('Every file introduced by this phase is declared and present', () => {
+  for (const file of added) {
+    assert.ok(fs.existsSync(path.join(root, file)), `Declared new file is missing: ${file}`);
+  }
+});
+
+test('No file in the tree is unaccounted for', () => {
+  // A file that is neither in the baseline, nor a declared change, nor a
+  // declared addition would otherwise slip past the guard entirely.
+  const accounted = new Set([...Object.keys(manifest), ...changed, ...added]);
+  // The manifest cannot record its own hash, so it is not expected to.
+  accounted.add(path.relative(root, manifestPath).split(path.sep).join('/'));
+  const unaccounted = treeFiles().filter(file => !accounted.has(file));
+  assert.deepEqual(unaccounted, [], `Unaccounted files in the tree: ${unaccounted.join(', ')}`);
 });

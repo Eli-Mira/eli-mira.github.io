@@ -1,5 +1,5 @@
 {
-  ".github/workflows/pages.yml": "64f850bcdaf1135b42ee9b24a3841ab4c4791e13e6b47387d898b2c8a1208396",
+  ".github/workflows/pages.yml": "3b125bb3722e498969b6c4723b5e0274677544121cc84dd3ac037f3baf414e84",
   "docs/ART_DIRECTION.md": "1e3294d77235d3880f29742d22087dc65ad6043dca3a67f57a169de43fa5f6c8",
   "docs/DESIGN_SYSTEM.md": "14fe258b0b5af20147735831841c93ece4196e3a13eaf49b09519dfdded3ad4e",
   "docs/font-manifest.json": "8249e26f41f7dc1ead2ddd1e6f99057be8751208b217de90da12186fe3313e53",
@@ -16,8 +16,8 @@
   "README.md": "0b73443775d3f96c1f5c1a8e1c1c6ef363ffcb95998b7b1cb488b0fc81a17c28",
   "scripts/check-budget.mjs": "1afdf7e7e27c4f0e4a442f0b71da7ba25329cfac194643a89a31a8ced7b70f55",
   "scripts/manifest.mjs": "8f519724a2b2a22c5e00dafe234d58a840f4a6df5c41ea1863ae3a1932e87908",
-  "scripts/release-manifest.mjs": "31a6095e15725ecbe52293df104674b287ca8d37d3dd5028b7b010baafcd4991",
-  "scripts/verify-integrity.mjs": "a3c266820bf21f0159c6f282b7c736b425f0c7ecff2da9da6c39029c8d38f13d",
+  "scripts/release-manifest.mjs": "106f59db0045a25310cf7505ec071edc756dc148053b89c6875d5d09ffb0cb79",
+  "scripts/verify-integrity.mjs": "b24ed3c8e60b9a797cf3ce7a3ef32c466a5ada7525d4b5a38021db500754b179",
   "src/App.jsx": "aabe9d1f1e83907bbe32db9b80bf9cfe9918208471238c23464b0ba5147b991f",
   "src/assets/fonts/body.ttf": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6",
   "src/assets/fonts/body.woff2": "09d05aaea37d6b933bbfd910372fa0f1bd06722550401be5307047e4fdb06e6f",
@@ -62,13 +62,12 @@
   "src/styles/fonts.css": "663532337eb237f580378c9bddf5d4e906117b06ff305102638f37789c90e14c",
   "src/styles/global.css": "74a821f8ec81ba46d0f1823109811b58c87fe42d5858f34bd863991384c0471f",
   "src/styles/tokens.css": "2ab83d5c1855834e010ec8a0d19f4738c88f64a4042b9df636012718013e2f48",
-  "tests/binding-integrity.test.js": "de990e1a5b6314515ea0770c8285d3ce2b40301a4a3cb9b390f404cf9c7c39be",
+  "tests/binding-integrity.test.js": "1a3c90596d2aa906a729d3c16b66d0e68918a891962e4b19c821d4ca5a531b49",
   "tests/browser-smoke.mjs": "e170fedfbc4e986eb41395f43d354ca3e59876dce7d95491e8228f4fa7653385",
   "tests/content.test.js": "58571ebef48d4d163463c7ba06dc29f5f312b389055139d8253611396e1f5bdf",
   "tests/impact-acceptance.mjs": "fa26fd1f770ca20e78f6828fb4a37e946008d93b3ad3d54cc0d624f65e53ccc2",
   "tests/impact-capture.mjs": "d20fa621f4fb4f7894e56330eeb36c71054e556ecafd762916eba993029d45ef",
   "tests/impact-contrast.mjs": "6a58ad5a58f77842c004c65d461b558a6746f8fab43db593e0cfce964c90b57b",
   "tests/motion.test.js": "0da91dcabe4b717a0c857e8e4e0d7bf17dc5ccf7a56f757d46a4184881a865be",
-  "tests/released-manifest.json": "e2278921e8007ba0c0d26a54bf273f68c73fcf73f6d30635ca8d4be6996f0035",
   "vite.config.js": "e9e8bb820f8d6be0c80a7ea24c0dc6ae0420e6f359bebc8304c0457f9fc3c968"
 }

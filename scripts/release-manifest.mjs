@@ -28,6 +28,8 @@ function walk(relative = '') {
     }
     if (!/\.(jsx?|mjs|css|html|json|svg|woff2|ttf|ico|txt|md|yml)$/.test(entry.name)) continue;
     const key = next.split(path.sep).join('/');
+    // The manifest cannot record its own hash, so it is left out of itself.
+    if (key === path.relative(root, output).split(path.sep).join('/')) continue;
     manifest[key] = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, next))).digest('hex');
   }
 }

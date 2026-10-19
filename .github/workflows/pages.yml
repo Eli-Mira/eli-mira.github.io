@@ -43,6 +43,12 @@ jobs:
           # build keeps noindex.
           PUBLIC_ROBOTS: index, follow
 
+      - name: Check the released tree is unchanged
+        run: npm run test:integrity
+
+      - name: Check the bundle budget
+        run: npm run test:budget
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
