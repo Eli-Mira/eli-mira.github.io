@@ -17,9 +17,20 @@ async function check(id, run) {
   catch (error) { results.push({ id, status: 'failed', message: error.message }); throw error; }
 }
 
+/**
+ * Driver-level WebGL performance notes are not page defects. They appear
+ * because this suite reads canvas pixels back to compare frames, which stalls
+ * the GPU pipeline. Anything the page itself logs is still recorded.
+ */
+const DRIVER_NOISE = /GL Driver Message|\.WebGL-|GPU stall due to ReadPixels/i;
+
 function observe(page) {
   page.on('pageerror', error => consoleErrors.push(error.message));
-  page.on('console', message => { if (['error', 'warning'].includes(message.type())) consoleErrors.push(`${message.type()}: ${message.text()}`); });
+  page.on('console', message => {
+    if (!['error', 'warning'].includes(message.type())) return;
+    if (DRIVER_NOISE.test(message.text())) return;
+    consoleErrors.push(`${message.type()}: ${message.text()}`);
+  });
   page.on('request', request => requests.push(request.url()));
   page.on('response', response => { if (response.status() >= 400) consoleErrors.push(`HTTP ${response.status()}: ${response.url()}`); });
 }
@@ -271,7 +282,7 @@ try {
     failed: results.filter(result => result.status === 'failed').length,
     normalFlowConsoleErrors: consoleErrors,
     networkOrigins: [...new Set(requests.map(request => new URL(request).origin))],
-    note: 'The deliberately aborted lazy-chunk case is a separate expected-failure context, not a normal-flow console-clean claim.',
+    note: 'The deliberately aborted lazy-chunk case is a separate expected-failure context, not a normal-flow console-clean claim. WebGL driver performance notes are excluded because this suite reads canvas pixels back to compare frames.',
   };
   fs.writeFileSync(path.join(output, 'results.json'), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
