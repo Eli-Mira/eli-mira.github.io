@@ -8,11 +8,13 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "lint": "eslint .",
-    "test": "node --test tests/content.test.js tests/motion.test.js",
+    "test": "node --test tests/content.test.js tests/motion.test.js tests/security.test.js",
+    "test:built": "node --test tests/built-output.test.js",
     "test:integrity": "node scripts/verify-integrity.mjs",
     "test:release-manifest": "node scripts/release-manifest.mjs",
     "test:browser": "node tests/browser-smoke.mjs",
-    "test:budget": "node scripts/check-budget.mjs"
+    "test:budget": "node scripts/check-budget.mjs",
+    "serve:headers": "node scripts/serve-with-headers.mjs"
   },
   "engines": {
     "node": ">=24"

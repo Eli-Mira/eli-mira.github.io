@@ -1,5 +1,5 @@
 {
-  ".github/workflows/pages.yml": "3b125bb3722e498969b6c4723b5e0274677544121cc84dd3ac037f3baf414e84",
+  ".github/workflows/pages.yml": "843c8e51730f432bbb3f7eb2a25b53d585d082f7aa43b4b90bd6025d0308fec0",
   "docs/ART_DIRECTION.md": "1e3294d77235d3880f29742d22087dc65ad6043dca3a67f57a169de43fa5f6c8",
   "docs/DESIGN_SYSTEM.md": "14fe258b0b5af20147735831841c93ece4196e3a13eaf49b09519dfdded3ad4e",
   "docs/font-manifest.json": "f303e7ad86c694038dc2d25a75d65ee993724c364d2fe8053da7f0e3ff1dfe59",
@@ -10,7 +10,7 @@
   "eslint.config.js": "f9c73ff0c011f4ec2808793f08586d21c916c4c0fe36f408e8cc264f96ca7d93",
   "index.html": "5da231a8a03627c8e45b31df1bcda9a5c1b24bc1b60117d432c5fcbe5f6a18bb",
   "package-lock.json": "a94c307aff0d5a94c4159be437dfe2103d7ef622f9608e9a72a4c066504faa39",
-  "package.json": "f0a833d05b6062245191987e096e089c3b6a4fe297c5df9e78b12c714de123c4",
+  "package.json": "0c219bce19e21e41faa5b310e4a43dc7277e60ac96d32c51532dc43d6d41310f",
   "public/artwork/eli-abstract.svg": "a425efda8525928b6e674568b87eea68900b3e14516368d0205264450564ffb3",
   "public/favicon.ico": "49f558e06dd75f8e796bed4f4aa4a511c35e042339a19d75d0ad27ec76ae4867",
   "README.md": "0b73443775d3f96c1f5c1a8e1c1c6ef363ffcb95998b7b1cb488b0fc81a17c28",
@@ -18,6 +18,7 @@
   "scripts/file-hash.js": "cff31201b2d27591e3d0f01f369b27805d22160a02e6d414dfc142b51dd658b7",
   "scripts/manifest.mjs": "8f519724a2b2a22c5e00dafe234d58a840f4a6df5c41ea1863ae3a1932e87908",
   "scripts/release-manifest.mjs": "4c5eeb155e6ef9281fb4865f18edd3a07465f4576aff114ba8b698a040392897",
+  "scripts/serve-with-headers.mjs": "ff520b8ddeba9f8616489ead429c3c73a18c7b2864d8e8e99d1e9d8da844b951",
   "scripts/verify-integrity.mjs": "b24ed3c8e60b9a797cf3ce7a3ef32c466a5ada7525d4b5a38021db500754b179",
   "src/App.jsx": "aabe9d1f1e83907bbe32db9b80bf9cfe9918208471238c23464b0ba5147b991f",
   "src/assets/fonts/body.ttf": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6",
@@ -65,10 +66,12 @@
   "src/styles/tokens.css": "2ab83d5c1855834e010ec8a0d19f4738c88f64a4042b9df636012718013e2f48",
   "tests/binding-integrity.test.js": "5754e307a8e27029700282af14e7059ebea989b49f0ca94ac8f38d8e13a15359",
   "tests/browser-smoke.mjs": "e170fedfbc4e986eb41395f43d354ca3e59876dce7d95491e8228f4fa7653385",
+  "tests/built-output.test.js": "0eeb2008eeb9f6f02f9c49b59eb3217cc05d808976e1ace3b34bdc27f09b3c42",
   "tests/content.test.js": "58571ebef48d4d163463c7ba06dc29f5f312b389055139d8253611396e1f5bdf",
   "tests/impact-acceptance.mjs": "fa26fd1f770ca20e78f6828fb4a37e946008d93b3ad3d54cc0d624f65e53ccc2",
   "tests/impact-capture.mjs": "d20fa621f4fb4f7894e56330eeb36c71054e556ecafd762916eba993029d45ef",
   "tests/impact-contrast.mjs": "6a58ad5a58f77842c004c65d461b558a6746f8fab43db593e0cfce964c90b57b",
   "tests/motion.test.js": "0da91dcabe4b717a0c857e8e4e0d7bf17dc5ccf7a56f757d46a4184881a865be",
-  "vite.config.js": "e9e8bb820f8d6be0c80a7ea24c0dc6ae0420e6f359bebc8304c0457f9fc3c968"
+  "tests/security.test.js": "3fb9d47e201466735e17e974938335b90f290a52ff9a6b5e7b475c4a6b7f258e",
+  "vite.config.js": "4d66856c8c62e793663bdaa4fd9242bdbe9634bc4c09d029fe8b764c09887015"
 }
