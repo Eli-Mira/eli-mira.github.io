@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "lint": "eslint .",
-    "test": "node --test tests/content.test.js",
+    "test": "node --test tests/content.test.js tests/motion.test.js",
     "test:integrity": "node scripts/verify-integrity.mjs",
     "test:release-manifest": "node scripts/release-manifest.mjs",
     "test:browser": "node tests/browser-smoke.mjs",

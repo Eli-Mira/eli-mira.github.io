@@ -18,6 +18,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import { graph, layoutGraph } from '../data/graph.js';
+import { pushOffset } from './nodePush.js';
 
 /**
  * The 3D signal graph.
@@ -88,6 +89,10 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     const mesh = new Mesh(sphere, material);
     mesh.position.set(position.x, position.y, position.z);
     mesh.userData.id = node.id;
+    mesh.userData.group = node.group;
+    // The laid-out position is kept separately, so the push effect can be
+    // applied on top of it every frame instead of accumulating.
+    mesh.userData.base = { x: position.x, y: position.y };
     root.add(mesh);
     pickable.push(mesh);
     nodeMeshes.set(node.id, mesh);
@@ -95,16 +100,19 @@ export function createSignalGraph(canvas, { motion, onHover }) {
 
   const linkPositions = [];
   const linkColors = [];
+  const linkPairs = [];
   for (const [from, to] of graph.links) {
     const a = positions.get(from);
     const b = positions.get(to);
     if (!a || !b) continue;
+    linkPairs.push([from, to]);
     linkPositions.push(a.x, a.y, a.z, b.x, b.y, b.z);
     const color = new Color(GROUP_COLORS.project);
     linkColors.push(color.r, color.g, color.b, 0.62, color.r, color.g, color.b, 0.62);
   }
   const linkGeometry = new BufferGeometry();
-  linkGeometry.setAttribute('position', new BufferAttribute(new Float32Array(linkPositions), 3));
+  const linkAttribute = new BufferAttribute(new Float32Array(linkPositions), 3);
+  linkGeometry.setAttribute('position', linkAttribute);
   linkGeometry.setAttribute('color', new BufferAttribute(new Float32Array(linkColors), 4));
   const linkMaterial = new LineBasicMaterial({
     vertexColors: true,
@@ -154,7 +162,9 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     // rather than sitting in the middle of it with dead space around.
     const viewHeight = 2 * Math.tan((46 * Math.PI) / 360) * camera.position.z;
     const viewWidth = viewHeight * camera.aspect;
-    const fit = Math.min(viewWidth / (extentX * 2), viewHeight / (extentY * 2)) * 0.92;
+    // The margin leaves room for the sway, so no node is clipped at the
+    // edge of the frame as the map turns.
+    const fit = Math.min(viewWidth / (extentX * 2), viewHeight / (extentY * 2)) * 0.86;
     root.scale.setScalar(fit);
 
     if (!reduced) {
@@ -164,6 +174,8 @@ export function createSignalGraph(canvas, { motion, onHover }) {
       root.rotation.x = Math.sin(state.time * 0.00008) * 0.07;
     }
 
+    // Every node returns to its laid-out position first, so the push below is
+    // an offset from the layout rather than a drift that accumulates.
     for (const [id, mesh] of nodeMeshes) {
       const hovered = state.hovered === id;
       const dimmed = state.hovered && !hovered;
@@ -171,24 +183,49 @@ export function createSignalGraph(canvas, { motion, onHover }) {
       const scale = mesh.scale.x + (target - mesh.scale.x) * 0.18;
       mesh.scale.setScalar(scale);
       mesh.material.opacity = (mesh.userData.group === 'project' ? 1 : 0.82) * (dimmed ? 0.4 : 1);
+
+      const base = mesh.userData.base;
+      let offsetX = 0;
+      let offsetY = 0;
+
+      // A hovered node's neighbours ease away from the pointer, so the
+      // connections to it open up and the relationship is legible without
+      // touching the labels.
+      if (state.hovered && !hovered && !reduced) {
+        const offset = pushOffset(base, state.pointerWorld);
+        offsetX = offset.x;
+        offsetY = offset.y;
+      }
+
+      mesh.position.x = base.x + offsetX;
+      mesh.position.y = base.y + offsetY;
     }
 
-    // A hovered node eases away from the pointer, so the connections to it
-    // open up and the relationship is legible without touching the labels.
-    if (state.hovered && !reduced) {
-      for (const [id, mesh] of nodeMeshes) {
-        if (id === state.hovered) continue;
-        const dx = mesh.position.x - state.pointerWorld.x;
-        const dy = mesh.position.y - state.pointerWorld.y;
-        const distance = Math.hypot(dx, dy) || 1;
-        const push = Math.max(0, 1.5 - distance) * 0.32;
-        mesh.position.x += (dx / distance) * push;
-        mesh.position.y += (dy / distance) * push;
-      }
-    }
+    syncLinks();
 
     renderer.render(scene, camera);
-    canvas.dataset.render = paused ? 'held' : 'live';
+    canvas.dataset.render = paused || reduced ? 'held' : 'live';
+  }
+
+  /**
+   * Rewrites the link geometry from the current node positions, so a
+   * connection stays attached to its nodes while they are pushed aside.
+   */
+  function syncLinks() {
+    const buffer = linkAttribute.array;
+    linkPairs.forEach(([from, to], index) => {
+      const a = nodeMeshes.get(from);
+      const b = nodeMeshes.get(to);
+      if (!a || !b) return;
+      const offset = index * 6;
+      buffer[offset] = a.position.x;
+      buffer[offset + 1] = a.position.y;
+      buffer[offset + 2] = a.position.z;
+      buffer[offset + 3] = b.position.x;
+      buffer[offset + 4] = b.position.y;
+      buffer[offset + 5] = b.position.z;
+    });
+    linkAttribute.needsUpdate = true;
   }
 
   function loop(now) {
