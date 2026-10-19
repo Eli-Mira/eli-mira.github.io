@@ -82,3 +82,9 @@ export const groupLabels = {
   tool: 'Tool',
   concept: 'Concept',
 };
+
+/** Every node, in the order they are drawn. */
+export const allNodes = [...graph.projects, ...graph.tools, ...graph.concepts];
+
+/** A node by its id, so a lookup does not have to search three lists. */
+export const nodeById = new Map(allNodes.map(node => [node.id, node]));

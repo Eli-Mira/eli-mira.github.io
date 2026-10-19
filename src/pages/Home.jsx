@@ -83,7 +83,7 @@ export default function Home() {
           <span>Human direction / machine assistance</span>
         </div>
         <ul className="destinations" aria-label="Site sections">
-          {sections.map(entry => <li key={entry.id}><a href={`#${entry.target}`} onClick={handleAnchorClick} data-destination={entry.id} aria-current={section === entry.id ? 'true' : undefined}><b>{entry.number}</b>{entry.label}</a></li>)}
+          {sections.map(entry => <li key={entry.id}><a href={`#${entry.target}`} onClick={handleAnchorClick} data-destination={entry.id} aria-current={section === entry.target ? 'true' : undefined}><b>{entry.number}</b>{entry.label}</a></li>)}
         </ul>
       </div>
 

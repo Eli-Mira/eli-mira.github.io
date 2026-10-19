@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { graph, groupLabels } from '../../data/graph.js';
+import { graph, groupLabels, nodeById } from '../../data/graph.js';
 import { getMotionState, subscribeMotionState } from '../../motion/motionState.js';
 
 /**
@@ -48,9 +48,7 @@ export default function SignalGraph() {
     };
   }, []);
 
-  const activeNode = active
-    ? graph.projects.concat(graph.tools, graph.concepts).find(node => node.id === active)
-    : null;
+  const activeNode = active ? nodeById.get(active) : null;
   const activeLinks = active ? graph.links.filter(([from, to]) => from === active || to === active) : [];
 
   return <figure className="signal-graph">
@@ -72,8 +70,7 @@ export default function SignalGraph() {
         <b>{project.label}</b>
         <span>{graph.links
           .filter(([from]) => from === project.id)
-          .map(([, to]) => to)
-          .map(id => graph.tools.concat(graph.concepts).find(node => node.id === id)?.label)
+          .map(([, to]) => nodeById.get(to)?.label)
           .join(' · ')}</span>
       </li>)}
     </ul>

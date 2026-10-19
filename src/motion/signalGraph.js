@@ -17,7 +17,7 @@ import {
   Vector3,
   WebGLRenderer,
 } from 'three';
-import { graph, layoutGraph } from '../data/graph.js';
+import { allNodes, graph, layoutGraph } from '../data/graph.js';
 import { pushOffset } from './nodePush.js';
 
 /**
@@ -73,7 +73,7 @@ export function createSignalGraph(canvas, { motion, onHover }) {
     extentX = Math.max(extentX, Math.abs(position.x));
     extentY = Math.max(extentY, Math.abs(position.y));
   }
-  const nodes = graph.projects.concat(graph.tools, graph.concepts);
+  const nodes = allNodes;
   const pickable = [];
   const nodeMeshes = new Map();
 

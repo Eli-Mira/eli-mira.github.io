@@ -17,20 +17,31 @@ import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 import { registerScrollController } from './scrollTo.js';
 import { getMotionState } from './motionState.js';
-import { handoverPending, releasePending } from './pending.js';
+import { releasePending } from './pending.js';
+import { sectionTargets } from '../data/sections.js';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SECTION_IDS = ['initialize', 'projects', 'neural-lab', 'system-profile', 'origin', 'transmission'];
+/** The state a revealed element ends in. */
+const SHOWN = { opacity: 1, y: 0, x: 0, clipPath: 'none' };
+
+/**
+ * Each section is given its own entrance rather than one repeated move: a
+ * rise for prose, a slide for rails and lists, and a wipe for the headings.
+ */
+const REVEAL_STYLES = {
+  rise: { from: { opacity: 0, y: 26 }, duration: 0.8, ease: 'power3.out' },
+  slide: { from: { opacity: 0, x: -22 }, duration: 0.75, ease: 'power3.out' },
+  wipe: { from: { opacity: 0, clipPath: 'inset(0 0 100% 0)' }, duration: 0.9, ease: 'power4.out' },
+};
+
+const show = targets => gsap.set(targets, SHOWN);
 
 function releaseHiddenContent() {
   // Anything the runtime was going to animate must be visible again if the
   // runtime goes away, whether it stopped or never started.
   releasePending();
-  gsap.set('[data-hero-line], [data-reveal-item]', { clearProps: 'all' });
-  gsap.set('[data-reveal-item]', { clipPath: 'none' });
-  gsap.set('.section-head h2', { clearProps: 'all' });
-  gsap.set('.destinations a', { clearProps: 'all' });
+  gsap.set('[data-hero-line], [data-reveal-item], .section-head h2', { clearProps: 'all' });
 }
 
 export function startMotion({ reduced = false } = {}) {
@@ -56,7 +67,31 @@ export function startMotion({ reduced = false } = {}) {
 
   // Reveal targets that have not fired yet. Pausing finishes them rather than
   // freezing them, so a section can never be left stranded at zero opacity.
-  const pending = new Map();
+  const pending = new Set();
+
+  /**
+   * Hides the targets and shows them again when the trigger comes into view.
+   *
+   * A paused runtime shows them straight away rather than waiting for the
+   * scroll, so pausing never leaves anything invisible.
+   */
+  const revealOnScroll = (trigger, targets, style, start) => {
+    gsap.set(targets, style.from);
+    pending.add(targets);
+    ScrollTrigger.create({
+      trigger,
+      start,
+      once: true,
+      onEnter: () => {
+        pending.delete(targets);
+        if (getMotionState().paused) {
+          show(targets);
+          return;
+        }
+        gsap.to(targets, { ...SHOWN, duration: style.duration, ease: style.ease, stagger: 0.06 });
+      },
+    });
+  };
 
   const context = gsap.context(() => {
     // ── Hero title sequence ────────────────────────────────────────────────
@@ -87,45 +122,11 @@ export function startMotion({ reduced = false } = {}) {
     // ── Section reveals ────────────────────────────────────────────────────
     // Opacity is used rather than visibility, so content that is still below
     // the fold stays reachable by keyboard and assistive technology.
-    //
-    // Each section is given its own entrance rather than one repeated move:
-    // a rise for prose, a slide for rails and lists, and a wipe for the
-    // section headings. The same rule covers the destination strip.
-    const REVEAL_STYLES = {
-      rise: { from: { opacity: 0, y: 26 }, duration: 0.8, ease: 'power3.out' },
-      slide: { from: { opacity: 0, x: -22 }, duration: 0.75, ease: 'power3.out' },
-      wipe: { from: { opacity: 0, clipPath: 'inset(0 0 100% 0)' }, duration: 0.9, ease: 'power4.out' },
-    };
-
     gsap.utils.toArray('[data-reveal]').forEach((section) => {
       const items = section.querySelectorAll('[data-reveal-item]');
       const targets = items.length ? items : [section];
-      const style = REVEAL_STYLES[section.dataset.revealStyle ?? 'rise'];
-
-      gsap.set(targets, style.from);
-      pending.set(section, { targets, style });
-
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top 85%',
-        once: true,
-        onEnter: () => {
-          pending.delete(section);
-          if (getMotionState().paused) {
-            gsap.set(targets, { opacity: 1, y: 0, x: 0, clipPath: 'none' });
-            return;
-          }
-          gsap.to(targets, {
-            opacity: 1,
-            y: 0,
-            x: 0,
-            clipPath: 'none',
-            duration: style.duration,
-            ease: style.ease,
-            stagger: 0.06,
-          });
-        },
-      });
+      const style = REVEAL_STYLES[section.dataset.revealStyle] ?? REVEAL_STYLES.rise;
+      revealOnScroll(section, targets, style, 'top 85%');
     });
 
     // ── Reading progress ───────────────────────────────────────────────────
@@ -144,7 +145,7 @@ export function startMotion({ reduced = false } = {}) {
       document.documentElement.dataset.section = id;
       window.dispatchEvent(new CustomEvent('redline:section', { detail: id }));
     };
-    SECTION_IDS.forEach((id) => {
+    sectionTargets.forEach((id) => {
       const element = document.getElementById(id);
       if (!element) return;
       ScrollTrigger.create({
@@ -154,7 +155,7 @@ export function startMotion({ reduced = false } = {}) {
         onToggle: (self) => { if (self.isActive) setSection(id); },
       });
     });
-    setSection(SECTION_IDS[0]);
+    setSection(sectionTargets[0]);
 
     // ── Hero depth: the poster drifts slower than the copy ────────────────
     gsap.to('[data-hero-art]', {
@@ -177,25 +178,10 @@ export function startMotion({ reduced = false } = {}) {
     });
 
     // ── Section headings settle as their section arrives ──────────────────
+    const headingStyle = { from: { opacity: 0, y: 18 }, duration: 0.7, ease: 'power3.out' };
     gsap.utils.toArray('.section-head h2').forEach((heading) => {
-      gsap.set(heading, { opacity: 0, y: 18 });
-      ScrollTrigger.create({
-        trigger: heading,
-        start: 'top 88%',
-        once: true,
-        onEnter: () => {
-          if (getMotionState().paused) {
-            gsap.set(heading, { opacity: 1, y: 0 });
-            return;
-          }
-          gsap.to(heading, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' });
-        },
-      });
+      revealOnScroll(heading, [heading], headingStyle, 'top 88%');
     });
-
-    // ── The destination strip marks where the reader is ───────────────────
-    // The strip lives in React and reads the same section event as the
-    // header, so the marker works whether or not motion is running.
   });
 
   registerScrollController({
@@ -203,7 +189,7 @@ export function startMotion({ reduced = false } = {}) {
   });
 
   // The runtime is live and now owns the hidden state through inline styles.
-  handoverPending();
+  releasePending();
 
   const refresh = () => ScrollTrigger.refresh();
   window.addEventListener('load', refresh);
@@ -215,11 +201,7 @@ export function startMotion({ reduced = false } = {}) {
       // Ambient motion stops. Scroll-linked entrances are allowed to finish so
       // that pausing never strands content at zero opacity.
       gsap.globalTimeline.timeScale(paused ? 0.001 : 1);
-      if (paused) {
-        pending.forEach(({ targets }) => {
-          gsap.set(targets, { opacity: 1, y: 0, x: 0, clipPath: 'none' });
-        });
-      }
+      if (paused) pending.forEach(show);
     },
     destroy() {
       window.removeEventListener('load', refresh);

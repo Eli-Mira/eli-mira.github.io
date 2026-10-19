@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { handleAnchorClick } from '../../motion/scrollTo.js';
 import useActiveSection from '../../motion/useActiveSection.js';
+import { sectionByTarget } from '../../data/sections.js';
 
 const links = [
   ['Projects', '#projects'],
@@ -14,6 +15,7 @@ export default function Navigation({ paused, reduced, onMotionToggle }) {
   const [open, setOpen] = useState(false);
   const section = useActiveSection();
   const menu = useRef(null);
+  const readout = sectionByTarget.get(section) ?? sectionByTarget.get('initialize');
 
   useEffect(() => {
     if (!open) return undefined;
@@ -31,24 +33,11 @@ export default function Navigation({ paused, reduced, onMotionToggle }) {
       {links.map(([label, href]) => <a key={href} href={href} onClick={event => { setOpen(false); handleAnchorClick(event); }} aria-current={section === href.slice(1) ? 'true' : undefined}>{label}</a>)}
     </nav>
     <div className="header-controls">
-      <p className="hud-readout" aria-live="off"><b>{sectionLabel(section).number}</b><i>/</i>{sectionLabel(section).name}</p>
+      <p className="hud-readout" aria-live="off"><b>{readout.number}</b><i>/</i>{readout.label}</p>
       <button className="motion-toggle" type="button" disabled={reduced} aria-pressed={paused} onClick={onMotionToggle}>
         {reduced ? 'Motion reduced' : paused ? 'Resume motion' : 'Pause motion'}
       </button>
       <button ref={menu} className="menu-toggle" type="button" aria-expanded={open} aria-controls="main-navigation" onClick={() => setOpen(value => !value)}>{open ? 'Close' : 'Menu'}</button>
     </div>
   </header>;
-}
-
-const SECTION_LABELS = {
-  initialize: { number: '00', name: 'INITIALIZE' },
-  projects: { number: '01', name: 'OPERATIONS' },
-  'neural-lab': { number: '02', name: 'NEURAL LAB' },
-  'system-profile': { number: '03', name: 'SYSTEM PROFILE' },
-  origin: { number: '04', name: 'ORIGIN' },
-  transmission: { number: '05', name: 'TRANSMISSION' },
-};
-
-function sectionLabel(id) {
-  return SECTION_LABELS[id] ?? SECTION_LABELS.initialize;
 }

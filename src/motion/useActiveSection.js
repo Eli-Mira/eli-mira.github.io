@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { sectionTargets } from '../data/sections.js';
 
 /**
  * Tracks which of the six destinations is on screen.
@@ -7,10 +8,8 @@ import { useEffect, useState } from 'react';
  * or unavailable, this falls back to an IntersectionObserver so the header
  * readout and the destination strip stay truthful either way.
  */
-const SECTION_IDS = ['initialize', 'projects', 'neural-lab', 'system-profile', 'origin', 'transmission'];
-
 export default function useActiveSection() {
-  const [section, setSection] = useState(SECTION_IDS[0]);
+  const [section, setSection] = useState(sectionTargets[0]);
 
   useEffect(() => {
     function onSection(event) { setSection(event.detail); }
@@ -19,7 +18,7 @@ export default function useActiveSection() {
   }, []);
 
   useEffect(() => {
-    const elements = SECTION_IDS
+    const elements = sectionTargets
       .map(id => document.getElementById(id))
       .filter(Boolean);
     if (!elements.length) return undefined;

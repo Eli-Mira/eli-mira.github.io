@@ -19,11 +19,3 @@ export function releasePending() {
     window.__motionFailsafe = null;
   }
 }
-
-/**
- * The runtime is live and now owns the hidden state through inline styles,
- * so the pre-paint classes can come off.
- */
-export function handoverPending() {
-  releasePending();
-}

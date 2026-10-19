@@ -187,6 +187,10 @@ try {
     await page.getByRole('button', { name: 'Pause motion', exact: true }).click();
     const opacities = await page.locator('[data-reveal-item]').evaluateAll(nodes => nodes.map(node => Number(getComputedStyle(node).opacity)));
     for (const opacity of opacities) assert.ok(opacity > 0.95, `Paused content stranded at opacity ${opacity}`);
+    // The section headings are held back the same way, so they have to be
+    // released too or a heading stays invisible until it is scrolled to.
+    const headings = await page.locator('.section-head h2').evaluateAll(nodes => nodes.map(node => Number(getComputedStyle(node).opacity)));
+    for (const opacity of headings) assert.ok(opacity > 0.95, `Paused heading stranded at opacity ${opacity}`);
     await page.getByRole('button', { name: 'Resume motion', exact: true }).click();
   });
 
@@ -260,6 +264,19 @@ try {
     assert.ok(atBottom > atTop + 20, `Progress did not advance: ${atTop} -> ${atBottom}`);
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(600);
+  });
+
+  await check('the-destination-strip-marks-the-section-being-read', async () => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await ready(page);
+    await page.evaluate(() => document.querySelector('#projects')?.scrollIntoView());
+    await page.waitForTimeout(1400);
+    const marked = await page.locator('.destinations a[aria-current="true"]').getAttribute('data-destination');
+    assert.equal(marked, 'operations', `The strip marked "${marked}" while the Operations section was on screen`);
+    // The marker has to be drawn, not only declared.
+    const drawn = await page.locator('.destinations a[aria-current="true"]')
+      .evaluate(node => getComputedStyle(node, '::before').transform);
+    assert.notEqual(drawn, 'matrix(0, 0, 0, 1, 0, 0)', 'The active marker was not drawn');
   });
 
   await check('the-signal-graph-renders-lit-nodes-and-links', async () => {

@@ -1,4 +1,8 @@
 // The six destinations of the REDLINE // OVERDRIVE architecture.
+//
+// A destination is not always the same thing as the element it points at:
+// Operations is the second destination but the Operations section is the
+// projects element. Both names are kept here so nothing has to guess.
 export const sections = [
   { id: 'initialize', number: '00', label: 'Initialize', target: 'initialize' },
   { id: 'operations', number: '01', label: 'Operations', target: 'projects' },
@@ -8,6 +12,8 @@ export const sections = [
   { id: 'transmission', number: '05', label: 'Transmission', target: 'transmission' },
 ];
 
-export function getSection(id) {
-  return sections.find(section => section.id === id) ?? null;
-}
+/** The element id of each destination, in the order they appear. */
+export const sectionTargets = sections.map(section => section.target);
+
+/** The destination that a given element id belongs to. */
+export const sectionByTarget = new Map(sections.map(section => [section.target, section]));
