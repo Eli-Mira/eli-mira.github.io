@@ -63,7 +63,7 @@ function treeFiles(relative = '') {
       found.push(...treeFiles(next));
       continue;
     }
-    if (!SOURCE.test(entry.name)) continue;
+    if (!SOURCE.test(entry.name) && entry.name !== '_headers') continue;
     found.push(next.split(path.sep).join('/'));
   }
   return found;

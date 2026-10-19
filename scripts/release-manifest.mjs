@@ -26,7 +26,7 @@ function walk(relative = '') {
       walk(next);
       continue;
     }
-    if (!/\.(jsx?|mjs|css|html|json|svg|woff2|ttf|ico|txt|md|yml)$/.test(entry.name)) continue;
+    if (!/\.(jsx?|mjs|css|html|json|svg|woff2|ttf|ico|txt|md|yml)$/.test(entry.name) && entry.name !== '_headers') continue;
     const key = next.split(path.sep).join('/');
     // The manifest cannot record its own hash, so it is left out of itself.
     if (key === path.relative(root, output).split(path.sep).join('/')) continue;
