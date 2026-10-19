@@ -85,7 +85,7 @@ button:disabled { cursor: default; opacity: .6; }
 }
 .skip:focus { top: 12px; }
 
-/* ── Header ─────────────────────────────────────────────────────────────── */
+/* Header */
 .site-header {
   position: sticky;
   top: 0;
@@ -170,7 +170,7 @@ button:disabled { cursor: default; opacity: .6; }
 .menu-toggle:hover { border-color: var(--signal); color: var(--signal); }
 .menu-toggle { display: none; min-width: 68px; background: var(--carbon); }
 
-/* ── Hero / impact frame ────────────────────────────────────────────────── */
+/* Hero / impact frame */
 .hero {
   position: relative;
   height: calc(100svh - 88px);
@@ -389,7 +389,7 @@ button:disabled { cursor: default; opacity: .6; }
 }
 .boot-replay:hover { color: var(--signal); }
 
-/* ── Lain badge (hero) ──────────────────────────────────────────────────── */
+/* Lain badge (hero) */
 .lain-badge { position: absolute; right: 7.2vw; bottom: 32px; display: flex; align-items: center; gap: 16px; font: 11px/1.7 var(--font-mono); }
 .lain-badge pre { margin: 0; color: #7df1ff; font: 11px/1.1 var(--font-mono); }
 .lain-badge span { display: block; color: var(--muted); font-size: 10px; }
@@ -421,7 +421,7 @@ button:disabled { cursor: default; opacity: .6; }
 }
 .boot-replay:hover::after { transform: scaleX(1); transform-origin: left; }
 
-/* ── Brandline and destination strip ────────────────────────────────────── */
+/* Brandline and destination strip */
 .brandline {
   position: relative;
   padding: 22px var(--gutter);
@@ -477,7 +477,7 @@ button:disabled { cursor: default; opacity: .6; }
 .destinations a[aria-current='true'] b { color: var(--signal); }
 .destinations a[aria-current='true']::before { transform: scaleX(1); }
 
-/* ── Sections ───────────────────────────────────────────────────────────── */
+/* Sections */
 .content { max-width: var(--measure); margin-inline: auto; padding: 100px var(--gutter); }
 .section-head { margin-bottom: 40px; }
 .section-index { display: flex; align-items: baseline; gap: 10px; margin-bottom: 18px; font: 10px var(--font-mono); letter-spacing: .16em; color: var(--muted); text-transform: uppercase; }
@@ -485,7 +485,7 @@ button:disabled { cursor: default; opacity: .6; }
 .section-head h2, .lab h2, .origin h2 { margin: 0 0 18px; font: 800 clamp(42px, 4.6vw, 68px)/.98 var(--font-display); letter-spacing: -.02em; text-transform: uppercase; }
 .section-head p { max-width: 62ch; margin: 0; color: #c9c1d4; font-size: 14px; }
 
-/* ── Operations: the project archive ────────────────────────────────────── */
+/* Operations: the project archive */
 .project-archive { display: grid; grid-template-columns: 1.15fr 1fr; align-items: start; border-block: 1px solid var(--line); }
 .project-tabs {
   position: sticky;
@@ -552,7 +552,7 @@ button:disabled { cursor: default; opacity: .6; }
 .project-links a { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 16px; border: 1px solid #5c3a6e; color: #e9b9d6; font: 11px var(--font-mono); transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease), transform var(--duration) var(--ease); }
 .project-links a:hover { border-color: var(--signal); color: var(--signal); transform: translateY(-2px); }
 
-/* ── Neural lab ─────────────────────────────────────────────────────────── */
+/* Neural lab */
 .lab { background: #140c24; border-block: 1px solid var(--line); }
 .lab-layout { display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; }
 .lab h2 { margin-bottom: 26px; }
@@ -611,7 +611,7 @@ button:disabled { cursor: default; opacity: .6; }
 .signal-list b { color: var(--bone); font: 12px var(--font-mono); font-weight: 400; }
 .signal-list span { color: #9c92b4; font: 10px/1.6 var(--font-mono); }
 
-/* ── System profile ─────────────────────────────────────────────────────── */
+/* System profile */
 .profile-strip { border-bottom: 1px solid var(--line); }
 .skill-groups { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; border: 1px solid var(--line); }
 .skill-groups > li { padding: 22px 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background 320ms var(--ease); }
@@ -629,7 +629,7 @@ button:disabled { cursor: default; opacity: .6; }
 .path-steps b { display: block; margin-bottom: 6px; color: var(--bone); font: 700 15px var(--font-display); }
 .path-steps span { color: #9c92b4; font: 10px var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
 
-/* ── Origin ─────────────────────────────────────────────────────────────── */
+/* Origin */
 .origin { display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; }
 .origin h2 { font-size: clamp(42px, 4.4vw, 60px); }
 .origin p { color: #b1aac2; font-size: 14px; }
@@ -639,7 +639,7 @@ button:disabled { cursor: default; opacity: .6; }
 .focus-list b { display: block; margin-bottom: 6px; color: var(--bone); font-size: 15px; }
 .focus-list span { color: #b2a9c3; font-size: 13px; line-height: 1.75; }
 
-/* ── Transmission / footer ───────────────────────────────────────────────── */
+/* Transmission / footer */
 /* The last band. The page closes the way the sky does, with the light
    going down behind it. */
 .footer {
@@ -688,7 +688,7 @@ button:disabled { cursor: default; opacity: .6; }
 .footer-note { margin-top: 26px; color: #9c92b4; font: 10px/1.7 var(--font-mono); }
 .footer-base { max-width: var(--measure); margin: 40px auto 0; padding-top: 20px; border-top: 1px solid #2e1c4d; display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; color: #7d7196; font: 10px var(--font-mono); }
 
-/* ── Boot overlay ───────────────────────────────────────────────────────── */
+/* Boot overlay */
 .boot-overlay { position: fixed; inset: 0; margin: auto; width: min(700px, calc(100% - 40px)); max-height: calc(100svh - 40px); padding: clamp(28px, 5vw, 65px); background: #140c24; color: var(--bone); border: 1px solid #6b3a86; }
 .boot-overlay:not([open]) { display: none; }
 .boot-overlay::backdrop { background: #0a0614e8; }
@@ -699,7 +699,7 @@ button:disabled { cursor: default; opacity: .6; }
 .boot-track span { display: block; width: 100%; height: 100%; background: var(--signal); transform-origin: left; animation: boot-progress 2s linear both; }
 @keyframes boot-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* ── Motion control ─────────────────────────────────────────────────────── */
+/* Motion control */
 /* Pre-paint reservation: the entrance targets are held until the motion
    runtime takes over, so nothing flashes its final state. */
 html.hero-pending [data-hero-line],

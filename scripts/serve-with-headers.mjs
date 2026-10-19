@@ -19,6 +19,11 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const site = path.join(root, 'dist');
 const port = Number(process.argv[2] ?? 4180);
 
+if (!fs.existsSync(path.join(site, 'index.html'))) {
+  console.error('There is no build to serve. Run npm run build first.');
+  process.exit(1);
+}
+
 const TYPES = {
   '.css': 'text/css; charset=utf-8',
   '.html': 'text/html; charset=utf-8',
@@ -32,7 +37,14 @@ const TYPES = {
   '.xml': 'application/xml; charset=utf-8',
 };
 
-/** Reads public/_headers into a map of path pattern to headers. */
+/**
+ * Reads the _headers file into rules.
+ *
+ * The format is a path pattern on its own line, then indented header lines
+ * beneath it. A pattern of /* applies to everything; anything else is
+ * treated as a path prefix, which is what the one rule in this repository
+ * needs.
+ */
 function readHeaders() {
   const file = path.join(site, '_headers');
   if (!fs.existsSync(file)) return [];
@@ -57,7 +69,7 @@ const rules = readHeaders();
 function headersFor(urlPath) {
   const headers = {};
   for (const rule of rules) {
-    if (rule.pattern !== '/*' && urlPath !== rule.pattern) continue;
+    if (rule.pattern !== '/*' && !urlPath.startsWith(rule.pattern)) continue;
     Object.assign(headers, rule.headers);
   }
   return headers;

@@ -7,7 +7,7 @@ import { getMotionState, subscribeMotionState } from '../../motion/motionState.j
  *
  * A real 3D node map of how the work connects: projects, the tools they
  * are built with, and the concepts they exercise. It is an enhancement over
- * the crimson poster, so it loads on demand and never blocks the page.
+ * the poster, so it loads on demand and never blocks the page.
  *
  * The map is decorative. The same relationships are listed as text below it,
  * so the content is never only available inside a canvas.

@@ -22,11 +22,11 @@ import {
  * Impact frame depth field.
  *
  * A corridor of tilted frames receding into a fogged void, with dust
- * catching the crimson light. The camera dollies forward on scroll and yaws
- * with the pointer, so the poster reads as a space rather than a flat cut.
+ * catching the light. The camera dollies forward on scroll and yaws with
+ * the pointer, so the poster reads as a space rather than a flat cut.
  *
- * This module is loaded on demand: the crimson field in CSS is the instant
- * poster, and the 3D depth arrives as an enhancement on top of it.
+ * Loaded on demand: the sky in CSS is the instant poster, and the 3D depth
+ * arrives as an enhancement on top of it.
  *
  * Contract with the surrounding page:
  *   - the visible canvas is the renderer's own target, never a hidden one;
@@ -138,7 +138,7 @@ export function createDepthField(canvas, { motion }) {
   });
   const frames = new LineSegments(frameGeometry, frameMaterial);
 
-  // The crimson slab at the end of the corridor gives the void a light source.
+  // The slab at the end of the corridor gives the void a light source.
   const slabGeometry = new BufferGeometry();
   slabGeometry.setAttribute('position', new BufferAttribute(new Float32Array([
     -1.6, -2.1, -20.5, 1.6, -2.1, -20.5, 1.6, 2.1, -20.5,
@@ -167,7 +167,7 @@ export function createDepthField(canvas, { motion }) {
   const group = new Group();
   // The tunnel recedes into the empty lower right of the hero, clear of the
   // copy block, so the far frames read as light on black and the near ones
-  // read as structure against the crimson field.
+  // read as structure against the sky.
   group.position.set(0, 0, 0);
   group.rotation.z = 0.16;
   group.add(frames, slab, dust);

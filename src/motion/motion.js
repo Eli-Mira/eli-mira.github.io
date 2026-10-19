@@ -94,7 +94,7 @@ export function startMotion({ reduced = false } = {}) {
   };
 
   const context = gsap.context(() => {
-    // ── Hero title sequence ────────────────────────────────────────────────
+    // Hero title sequence
     const heroLines = gsap.utils.toArray('[data-hero-line]');
     if (heroLines.length) {
       const sequence = gsap.timeline({ defaults: { ease: 'power4.out' } })
@@ -119,7 +119,7 @@ export function startMotion({ reduced = false } = {}) {
       }
     }
 
-    // ── Section reveals ────────────────────────────────────────────────────
+    // Section reveals
     // Opacity is used rather than visibility, so content that is still below
     // the fold stays reachable by keyboard and assistive technology.
     gsap.utils.toArray('[data-reveal]').forEach((section) => {
@@ -129,7 +129,7 @@ export function startMotion({ reduced = false } = {}) {
       revealOnScroll(section, targets, style, 'top 85%');
     });
 
-    // ── Reading progress ───────────────────────────────────────────────────
+    // Reading progress
     gsap.utils.toArray('[data-progress-fill]').forEach((bar) => {
       gsap.fromTo(bar,
         { scaleX: 0 },
@@ -140,7 +140,7 @@ export function startMotion({ reduced = false } = {}) {
         });
     });
 
-    // ── Section tracking ───────────────────────────────────────────────────
+    // Section tracking
     const setSection = (id) => {
       document.documentElement.dataset.section = id;
       window.dispatchEvent(new CustomEvent('redline:section', { detail: id }));
@@ -157,7 +157,7 @@ export function startMotion({ reduced = false } = {}) {
     });
     setSection(sectionTargets[0]);
 
-    // ── Hero depth: the poster drifts slower than the copy ────────────────
+    // Hero depth: the poster drifts slower than the copy
     gsap.to('[data-hero-art]', {
       yPercent: 8,
       ease: 'none',
@@ -177,7 +177,7 @@ export function startMotion({ reduced = false } = {}) {
       scrollTrigger: { trigger: '#initialize', start: 'top top', end: 'bottom top', scrub: 0.8 },
     });
 
-    // ── Section headings settle as their section arrives ──────────────────
+    // Section headings settle as their section arrives
     const headingStyle = { from: { opacity: 0, y: 18 }, duration: 0.7, ease: 'power3.out' };
     gsap.utils.toArray('.section-head h2').forEach((heading) => {
       revealOnScroll(heading, [heading], headingStyle, 'top 88%');

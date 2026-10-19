@@ -4,7 +4,7 @@ import { getMotionState, subscribeMotionState } from '../../motion/motionState.j
 /**
  * Impact frame depth field.
  *
- * The crimson field in CSS is the instant poster. This canvas adds the 3D
+ * The sky in CSS is the instant poster. This canvas adds the 3D
  * depth on top of it, and it is loaded on demand so the 3D engine never
  * blocks the first paint.
  *

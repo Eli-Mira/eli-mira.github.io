@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react';
 import { models, modelInventoryNote } from '../data/models.js';
 import { intelSources, intelPipeline, labPrinciples, labNote } from '../data/lab.js';
-import { stack } from '../data/stack.js';
+import { stack, stackNote } from '../data/stack.js';
 import LabErrorBoundary from '../components/ui/LabErrorBoundary.jsx';
 
 const LainConsole = lazy(() => import('../components/character/LainConsole.jsx'));
@@ -54,6 +54,7 @@ export default function NeuralLab() {
         <ul className="source-list">
           {stack.map(item => <li key={item.name}><b>{item.name} {item.version}</b><span>{item.role}</span></li>)}
         </ul>
+        <p className="lab-note">{stackNote}</p>
 
         <p className="detail-label">Local model collection</p>
         <p className="lab-note">{modelInventoryNote}{models.length ? ` ${models.map(model => model.name).join(', ')}` : ''}</p>
