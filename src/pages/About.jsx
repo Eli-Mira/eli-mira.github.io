@@ -6,9 +6,15 @@ export default function About() {
       <p className="section-index"><b>04</b> Origin</p>
       <h2 id="origin-title">Eli, behind the work.</h2>
       <p className="origin-role">{origin.role}</p>
+      <div className="origin-story">
+        {origin.story.map(paragraph => <p key={paragraph.slice(0, 24)}>{paragraph}</p>)}
+      </div>
     </div>
-    <ul className="focus-list" data-reveal-item>
-      {origin.focus.map(item => <li key={item.title}><b>{item.title}</b><span>{item.detail}</span></li>)}
-    </ul>
+    <div data-reveal-item>
+      <p className="detail-label">What keeps coming up</p>
+      <ul className="focus-list">
+        {origin.focus.map(item => <li key={item.title}><b>{item.title}</b><span>{item.detail}</span></li>)}
+      </ul>
+    </div>
   </section>;
 }

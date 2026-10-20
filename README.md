@@ -74,7 +74,8 @@ file applied, and the browser suite runs against it.
 
 Two things GitHub Pages cannot do, and this site does not claim otherwise:
 set `X-Frame-Options`, and deliver `frame-ancestors`. Both need a front end
-in front of the site.
+in front of the site. The one defence that is left without one is a frame
+guard in the page's first script, and that is what the site ships.
 
 The `_headers` file is served here as a plain file, because nothing reads
 it. That is harmless: it holds the same policy the page already carries in

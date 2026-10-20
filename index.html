@@ -13,6 +13,11 @@
     <link rel="icon" href="./favicon.ico" />
     <title>ELI / REDLINE // OVERDRIVE</title>
     <script>
+      // This page is not meant to be framed. GitHub Pages can send neither
+      // X-Frame-Options nor frame-ancestors, so this is the guard that is
+      // left, and it runs before anything else is loaded.
+      if (window.top !== window.self) window.top.location = window.self;
+
       // Reserve the entrance animation before first paint, so the title
       // sequence never flashes its final state. The failsafe releases the
       // content if the motion runtime cannot load.

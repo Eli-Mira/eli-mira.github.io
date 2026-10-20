@@ -53,6 +53,20 @@ test('No project states a metric, a count or a claim it cannot evidence', () => 
   }
 });
 
+test('The origin is written in the first person and says what it does not claim', () => {
+  assert.ok(Array.isArray(origin.story) && origin.story.length >= 3, 'The origin needs a narrative');
+  const story = origin.story.join(' ');
+  assert.match(story, /\bI\b/, 'The origin should be in the first person');
+  assert.match(story, /shipped, not what is planned/, 'The origin should end on the line the site is built on');
+  // The two claims the site being replaced made that the source contradicts.
+  assert.doesNotMatch(story, /fruit slicer/i, 'The old page named a game the repository does not contain');
+  assert.doesNotMatch(story, /four specialized reviewers|runs four/i, 'The old page claimed the reviewers run; they are placeholders');
+  // Nothing may be dated, because a page that lives for years should not
+  // rot on a relative date or a stated age.
+  assert.doesNotMatch(story, /\b\d{1,2}-?year-?old\b/i, 'The origin should not state an age');
+  assert.doesNotMatch(story, /\b(three|two|four|five|six|seven) years ago\b/i, 'The origin should not use a relative date');
+});
+
 test('Public data exposes only allowlisted public links and no personal data', () => {
   const serialized = JSON.stringify({ projects, skills, models, lab: { intelSources, intelPipeline, labPrinciples }, graph, contact, origin });
   // A local machine path is a drive letter at the start of a value, not the

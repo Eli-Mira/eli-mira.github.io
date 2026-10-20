@@ -634,6 +634,10 @@ button:disabled { cursor: default; opacity: .6; }
 .origin h2 { font-size: clamp(42px, 4.4vw, 60px); }
 .origin p { color: #b1aac2; font-size: 14px; }
 .origin-role { margin: 0 0 var(--space-5); color: #ded7e7; font-size: 16px; line-height: 1.8; }
+.origin-story { max-width: 62ch; }
+.origin-story p { margin: 0 0 18px; font-size: 15px; line-height: 1.85; }
+.origin-story p:last-child { margin-bottom: 0; color: #ded7e7; }
+.origin > div:last-child > .detail-label:first-child { margin-top: 0; }
 .focus-list { margin: 0; padding: 0; list-style: none; }
 .focus-list li { padding: 18px 0; border-top: 1px solid var(--line); }
 .focus-list b { display: block; margin-bottom: 6px; color: var(--bone); font-size: 15px; }
